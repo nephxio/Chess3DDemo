@@ -25,19 +25,19 @@ void AChessBoard::BeginPlay()
 	{
 		if (Board[i]->GetBoardCoordinate().X - 1 >= 1)
 		{
-			Board[i]->pNeighbors[1] = GetTile(Board[i]->GetBoardCoordinate().X - 1, Board[i]->GetBoardCoordinate().Y);
+			Board[i]->SetAdjacentTile(TILE_WEST,GetTile(Board[i]->GetBoardCoordinate().X - 1, Board[i]->GetBoardCoordinate().Y));
 		}
 		if (Board[i]->GetBoardCoordinate().X + 1 <= 8)
 		{
-			Board[i]->pNeighbors[3] = GetTile(Board[i]->GetBoardCoordinate().X + 1, Board[i]->GetBoardCoordinate().Y);
+			Board[i]->SetAdjacentTile(TILE_EAST,GetTile(Board[i]->GetBoardCoordinate().X + 1, Board[i]->GetBoardCoordinate().Y));
 		}
 		if (Board[i]->GetBoardCoordinate().Y - 1 >= 1)
 		{
-			Board[i]->pNeighbors[2] = GetTile(Board[i]->GetBoardCoordinate().X, Board[i]->GetBoardCoordinate().Y - 1);
+			Board[i]->SetAdjacentTile(TILE_SOUTH,GetTile(Board[i]->GetBoardCoordinate().X, Board[i]->GetBoardCoordinate().Y - 1));
 		}
 		if (Board[i]->GetBoardCoordinate().Y + 1 <= 8)
 		{
-			Board[i]->pNeighbors[0] = GetTile(Board[i]->GetBoardCoordinate().X, Board[i]->GetBoardCoordinate().Y + 1);
+			Board[i]->SetAdjacentTile(TILE_NORTH,GetTile(Board[i]->GetBoardCoordinate().X, Board[i]->GetBoardCoordinate().Y + 1));
 		}
 	}
 

@@ -54,12 +54,14 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Object Initialization")
 	UMaterialInstanceDynamic* GetDynamicMaterial();
 
-	UPROPERTY(EditAnywhere, Category = "Board")
-	ATile* pNeighbors[4];
+	void SetAdjacentTile(int Direction, ATile* pTile) { pNeighbors[Direction] = pTile; }
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	//stores adjacent tiles in N/W/S/E directions, respectively
+	ATile* pNeighbors[4];
 
 	//Static Mesh Component
 	UPROPERTY(EditDefaultsOnly, Category = "Mesh")
