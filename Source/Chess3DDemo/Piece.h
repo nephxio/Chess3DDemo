@@ -70,6 +70,8 @@ public:
 
 	void SetBoardReference(class AChessBoard* const pBoard);
 
+	TArray<ATile*> GetValidMovesInDirection(int PrimaryDirection, int SecondaryDirection = -1);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

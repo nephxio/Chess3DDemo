@@ -111,7 +111,7 @@ ATile* ATile::GetTileInDirection(int PrimaryDirection, int SecondaryDirection)
 	{
 		if (pNeighbors[PrimaryDirection])
 		{
-			return pNeighbors[PrimaryDirection]->pNeighbors[SecondaryDirection];
+			return pNeighbors[PrimaryDirection]->GetTileInDirection(SecondaryDirection);
 		}
 		else
 		{

@@ -16,11 +16,4 @@ class CHESS3DDEMO_API APieceQueen : public APiece
 //	UFUNCTION(BlueprintCallable, Category = "Movement")
 	TArray<ATile*> GetValidMoves() override;
 	
-	
-private:
-
-	TArray<ATile*> GenerateRookMoves();
-
-	TArray<ATile*> GenerateBishopMoves();
-	
 };

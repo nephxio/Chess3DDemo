@@ -93,6 +93,25 @@ void APiece::SetBoardReference(AChessBoard * const pBoard)
 	pGameBoard = pBoard;
 }
 
+TArray<ATile*> APiece::GetValidMovesInDirection(int PrimaryDirection, int SecondaryDirection)
+{
+	TArray<ATile*> pValidMoves;
+	ATile* pCurrentTile;
+
+	pCurrentTile = GetOccupyingTile();
+
+	while (pCurrentTile->GetTileInDirection(PrimaryDirection, SecondaryDirection) &&
+		(!pCurrentTile->GetTileInDirection(PrimaryDirection,SecondaryDirection)->GetTileIsOccupied() || 
+		(pCurrentTile->GetTileInDirection(PrimaryDirection,SecondaryDirection) && 
+			pCurrentTile->GetTileInDirection(PrimaryDirection,SecondaryDirection)->GetOccupyingPiece()->GetPlayerColor() != GetOccupyingTile()->GetOccupyingPiece()->GetPlayerColor())))
+	{
+		pValidMoves.Add(pCurrentTile->GetTileInDirection(PrimaryDirection,SecondaryDirection));
+		pCurrentTile = pCurrentTile->GetTileInDirection(PrimaryDirection, SecondaryDirection);
+	}
+
+	return pValidMoves;
+}
+
 TArray<ATile*> APiece::GetValidMoves()
 {
 	return TArray<ATile*>();
