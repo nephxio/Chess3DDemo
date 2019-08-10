@@ -16,30 +16,14 @@ AChessBoard::AChessBoard()
 // Called when the game starts or when spawned
 void AChessBoard::BeginPlay()
 {
+	ClickedPiece = nullptr;
+	ClickedTile = nullptr;
+
 	Super::BeginPlay();
 
 	SpawnBoard();
 
-	//quick and dirty linking of adjacent tiles
-	for (int i = 0; i < Board.Num(); i++)
-	{
-		if (Board[i]->GetBoardCoordinate().X - 1 >= 1)
-		{
-			Board[i]->SetAdjacentTile(TILE_WEST,GetTile(Board[i]->GetBoardCoordinate().X - 1, Board[i]->GetBoardCoordinate().Y));
-		}
-		if (Board[i]->GetBoardCoordinate().X + 1 <= 8)
-		{
-			Board[i]->SetAdjacentTile(TILE_EAST,GetTile(Board[i]->GetBoardCoordinate().X + 1, Board[i]->GetBoardCoordinate().Y));
-		}
-		if (Board[i]->GetBoardCoordinate().Y - 1 >= 1)
-		{
-			Board[i]->SetAdjacentTile(TILE_SOUTH,GetTile(Board[i]->GetBoardCoordinate().X, Board[i]->GetBoardCoordinate().Y - 1));
-		}
-		if (Board[i]->GetBoardCoordinate().Y + 1 <= 8)
-		{
-			Board[i]->SetAdjacentTile(TILE_NORTH,GetTile(Board[i]->GetBoardCoordinate().X, Board[i]->GetBoardCoordinate().Y + 1));
-		}
-	}
+	LinkTiles();
 
 	SpawnInitialPlayerPieces();
 }
@@ -48,7 +32,31 @@ void AChessBoard::BeginPlay()
 void AChessBoard::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
+
+}
+
+void AChessBoard::LinkTiles()
+{
+	//quick and dirty linking of adjacent tiles
+	for (int i = 0; i < Board.Num(); i++)
+	{
+		if (Board[i]->GetBoardCoordinate().X - 1 >= 1)
+		{
+			Board[i]->SetAdjacentTile(TILE_WEST, GetTile(Board[i]->GetBoardCoordinate().X - 1, Board[i]->GetBoardCoordinate().Y));
+		}
+		if (Board[i]->GetBoardCoordinate().X + 1 <= 8)
+		{
+			Board[i]->SetAdjacentTile(TILE_EAST, GetTile(Board[i]->GetBoardCoordinate().X + 1, Board[i]->GetBoardCoordinate().Y));
+		}
+		if (Board[i]->GetBoardCoordinate().Y - 1 >= 1)
+		{
+			Board[i]->SetAdjacentTile(TILE_SOUTH, GetTile(Board[i]->GetBoardCoordinate().X, Board[i]->GetBoardCoordinate().Y - 1));
+		}
+		if (Board[i]->GetBoardCoordinate().Y + 1 <= 8)
+		{
+			Board[i]->SetAdjacentTile(TILE_NORTH, GetTile(Board[i]->GetBoardCoordinate().X, Board[i]->GetBoardCoordinate().Y + 1));
+		}
+	}
 }
 
 APiece* AChessBoard::SpawnPiece(ATile* pTile, TSubclassOf<APiece> PieceToSpawn, int Player)

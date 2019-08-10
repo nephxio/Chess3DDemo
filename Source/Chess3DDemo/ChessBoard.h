@@ -63,11 +63,21 @@ private:
 	//Holds all the White Pieces in play
 	TArray<APiece*> PlayerWhite;
 
+	//Links adjacent tiles together
+	void LinkTiles();
+
 	//Creates the board
 	void SpawnBoard();
 
 	//Sets up Black and White players
 	void SpawnInitialPlayerPieces();
+
+	//Piece clicked on by user
+	APiece* ClickedPiece;
+
+	//Tile Clicked on by user
+	ATile* ClickedTile;
+
 
 
 		
