@@ -101,6 +101,26 @@ UMaterialInstanceDynamic* ATile::GetDynamicMaterial()
 	return pDynamicMaterial;
 }
 
+ATile* ATile::GetTileInDirection(int PrimaryDirection, int SecondaryDirection)
+{
+	if(SecondaryDirection < 0)
+	{ 
+		return pNeighbors[PrimaryDirection];
+	}
+	else
+	{
+		if (pNeighbors[PrimaryDirection])
+		{
+			return pNeighbors[PrimaryDirection]->pNeighbors[SecondaryDirection];
+		}
+		else
+		{
+			return nullptr;
+		}
+	}
+	return nullptr;
+}
+
 void ATile::ChangeTint(FColor Color)
 {
 	FLinearColor CurrentColor;

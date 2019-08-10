@@ -56,6 +56,8 @@ public:
 
 	void SetAdjacentTile(int Direction, ATile* pTile) { pNeighbors[Direction] = pTile; }
 
+	ATile* GetTileInDirection(int PrimaryDirection, int SecondaryDirection = -1);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
