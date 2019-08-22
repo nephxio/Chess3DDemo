@@ -15,8 +15,17 @@
 #define PLAYER_WHITE		1
 #define PLAYER_BLACK		2
 
-#define COLOR_BLACK		FLinearColor::Black
-#define COLOR_WHITE		FLinearColor::White
+enum class ETile_Direction : uint8 {
+	TILE_NORTH,
+	TILE_WEST,
+	TILE_SOUTH,
+	TILE_EAST,
+};
+
+//enum class Player_Color : int {
+//	PLAYER_WHITE,
+//	PLAYER_BLACK,
+//};
 
 
 
@@ -42,7 +51,7 @@ public:
 	bool IsHighlighted();
 
 	UFUNCTION(BlueprintCallable, Category = "Highlighting")
-	void SetIsHighlighted(bool Highlight);
+	void SetIsHighlighted();
 
 	UFUNCTION(BlueprintCallable, Category = "Player Data")
 	int GetPlayerColor();
@@ -104,5 +113,29 @@ private:
 
 	//Stores if piece is dead
 	bool IsDead = false;
+};
 
+/**
+ *
+ */
+UCLASS()
+class CHESS3DDEMO_API APieceBishop : public APiece
+{
+	GENERATED_BODY()
+
+		//	UFUNCTION(BlueprintCallable, Category = "Movement")
+		TArray<ATile*> GetValidMoves() override;
+};
+
+
+/**
+ *
+ */
+UCLASS()
+class CHESS3DDEMO_API APieceKing : public APiece
+{
+	GENERATED_BODY()
+
+		//	UFUNCTION(BlueprintCallable, Category = "Movement")
+		TArray<class ATile*> GetValidMoves() override;
 };

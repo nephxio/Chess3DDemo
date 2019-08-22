@@ -125,20 +125,19 @@ void APiece::HighlightedPieceGrab()
 	{
 		PieceLoc.Z += 50.f;
 //		SetActorLocation(PieceLoc);
-		IsPieceHighlighted = true;
 	}
 	else if (IsPieceHighlighted)
 	{
 		PieceLoc.Z -= 50.f;
 //		SetActorLocation(PieceLoc);
-		IsPieceHighlighted = false;
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("HighlightedPieceGrab: bIsHighlighted check failure."));
+		UE_LOG(LogTemp, Warning, TEXT("HighlightedPieceGrab: IsHighlighted check failure."));
 	}
 
 	ChangeHighlight();
+	SetIsHighlighted();
 }
 
 bool APiece::ChangeHighlight()
@@ -150,7 +149,7 @@ bool APiece::ChangeHighlight()
 	pDynamicMaterial = Cast<UMaterialInstanceDynamic>(Components[0]->GetMaterial(0));
 
 	//If piece is not highlighted, highlight it, else remove highlight
-	if (IsPieceHighlighted)
+	if (!IsPieceHighlighted)
 	{
 		pDynamicMaterial->SetScalarParameterValue("Intensity", 1.0f);
 	}
@@ -168,12 +167,76 @@ bool APiece::IsHighlighted()
 	return IsPieceHighlighted;
 }
 
-void APiece::SetIsHighlighted(bool Highlight)
+void APiece::SetIsHighlighted()
 {
-	IsPieceHighlighted = Highlight;
+	if (IsPieceHighlighted)
+	{
+		IsPieceHighlighted = false;
+	}
+	else
+	{
+		IsPieceHighlighted = true;
+	}
 }
 
 int APiece::GetPlayerColor()
 {
 	return PlayerColor;
+}
+
+TArray<ATile*> APieceBishop::GetValidMoves()
+{
+	TArray<ATile*> pValidMoves;
+
+	pValidMoves += GetValidMovesInDirection(TILE_NORTH, TILE_EAST);
+	pValidMoves += GetValidMovesInDirection(TILE_NORTH, TILE_WEST);
+	pValidMoves += GetValidMovesInDirection(TILE_SOUTH, TILE_EAST);
+	pValidMoves += GetValidMovesInDirection(TILE_SOUTH, TILE_WEST);
+
+	return pValidMoves;
+}
+
+TArray<ATile*> APieceKing::GetValidMoves()
+{
+	ATile* pTileToCheck = GetOccupyingTile();
+
+	TArray<int> TilesToRemove;
+	TArray<ATile*> pValidMoves;
+	TArray<FVector2D> TileOffsets = {
+		FVector2D(0,1), FVector2D(1,1),
+		FVector2D(1,0), FVector2D(1,-1),
+		FVector2D(0,-1), FVector2D(-1,-1),
+		FVector2D(-1,0), FVector2D(-1,1) };
+
+	for (int x = 0; x < 8; x++)
+	{
+		int XCoord = TileOffsets[x].X + pTileToCheck->GetBoardCoordinate().X;
+		int YCoord = TileOffsets[x].Y + pTileToCheck->GetBoardCoordinate().Y;
+
+		if (((XCoord <= 8) && (XCoord > 0))
+			&& ((YCoord <= 8) && (YCoord > 0)))
+		{
+			pValidMoves.Add(pGameBoard->GetTile(XCoord, YCoord));
+		}
+	}
+
+	for (int x = 0; x < pValidMoves.Num(); x++)
+	{
+		if (pValidMoves[x]->GetTileIsOccupied())
+		{
+			if (GetPlayerColor() == pValidMoves[x]->GetOccupyingPiece()->GetPlayerColor())
+			{
+				TilesToRemove.Add(x);
+			}
+		}
+	}
+
+	while (TilesToRemove.Num() != 0)
+	{
+		int x = TilesToRemove.Pop();
+		pValidMoves.RemoveAt(x);
+	}
+
+	return pValidMoves;
+
 }

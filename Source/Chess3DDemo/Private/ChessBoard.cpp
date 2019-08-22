@@ -2,6 +2,7 @@
 
 #include "ChessBoard.h"
 #include "Chess3DDemo.h"
+#include "Piece.h"
 
 
 // Sets default values
@@ -16,8 +17,6 @@ AChessBoard::AChessBoard()
 // Called when the game starts or when spawned
 void AChessBoard::BeginPlay()
 {
-	ClickedPiece = nullptr;
-	ClickedTile = nullptr;
 
 	Super::BeginPlay();
 
@@ -181,5 +180,5 @@ void AChessBoard::MovePiece(ATile* pDestinationTile, APiece* pPieceToMove)
 		pPieceToMove->SetOccupyingTile(pDestinationTile);
 	}
 
-	pPieceToMove->SetIsHighlighted(false);
+	pPieceToMove->SetIsHighlighted();
 }

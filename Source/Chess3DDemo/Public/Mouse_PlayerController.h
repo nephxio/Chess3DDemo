@@ -3,6 +3,8 @@
 #pragma once
 
 #include "GameFramework/PlayerController.h"
+#include "Tile.h"
+#include "Piece.h"
 #include "Mouse_PlayerController.generated.h"
 
 /**
@@ -26,5 +28,12 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
-	
+private:
+	//Piece clicked on by user
+	APiece* pClickedPiece;
+
+	//Tile Clicked on by user
+	ATile* pClickedTile;
+
+
 };

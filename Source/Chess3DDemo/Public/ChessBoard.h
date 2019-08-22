@@ -71,14 +71,5 @@ private:
 
 	//Sets up Black and White players
 	void SpawnInitialPlayerPieces();
-
-	//Piece clicked on by user
-	APiece* ClickedPiece;
-
-	//Tile Clicked on by user
-	ATile* ClickedTile;
-
-
-
 		
 };

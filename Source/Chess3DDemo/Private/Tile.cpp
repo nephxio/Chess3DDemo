@@ -42,13 +42,13 @@ void ATile::InitializePiece(int Player)
 
 	if (Player == PLAYER_BLACK)
 	{
-		PieceColor = COLOR_BLACK;
-		PlayerColor = COLOR_BLACK;
+		PieceColor = FLinearColor::Black;
+		PlayerColor = FLinearColor::Black;
 	}
 	else if (Player == PLAYER_WHITE)
 	{
-		PieceColor = COLOR_WHITE;
-		PlayerColor = COLOR_WHITE;
+		PieceColor = FLinearColor::White;
+		PlayerColor = FLinearColor::White;
 	}
 	else
 	{
@@ -127,7 +127,7 @@ void ATile::ChangeTint(FColor Color)
 
 	pDynamicMaterial->GetVectorParameterValue(FName("Tint"), CurrentColor);
 
-	if ((CurrentColor != COLOR_BLACK) && (CurrentColor != COLOR_WHITE))
+	if ((CurrentColor != FLinearColor::Black) && (CurrentColor != FLinearColor::White))
 	{
 		pDynamicMaterial->SetVectorParameterValue("Tint", PlayerColor);
 	}

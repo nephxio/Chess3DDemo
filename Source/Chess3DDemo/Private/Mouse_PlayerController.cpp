@@ -14,6 +14,9 @@ void AMouse_PlayerController::BeginPlay()
 	bShowMouseCursor = true;
 
 	InputComponent->BindAction("MouseLeftClicked", IE_Pressed, this, &AMouse_PlayerController::ClickOnObject);
+
+	pClickedPiece = nullptr;
+	pClickedTile = nullptr;
 }
 
 void AMouse_PlayerController::Tick(float DeltaTime)
@@ -24,9 +27,38 @@ void AMouse_PlayerController::Tick(float DeltaTime)
 void AMouse_PlayerController::ClickOnObject()
 {
 	FHitResult ClickResult;
+	APiece* pPreviousClickedPiece = pClickedPiece;
+
 	if (GetHitResultUnderCursorByChannel(UEngineTypes::ConvertToTraceType(ECC_Visibility), false, ClickResult))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("%s was clicked."), *ClickResult.Actor->GetName());
+		if (ClickResult.GetActor()->IsA(ATile::StaticClass()))
+		{
+			if (Cast<ATile>(ClickResult.GetActor()))
+			{
+				pClickedTile = Cast<ATile>(ClickResult.GetActor());
+			}
+		}
+		else if (ClickResult.GetActor()->IsA(APiece::StaticClass()))
+		{
+			if (Cast<APiece>(ClickResult.GetActor()))
+			{
+				pClickedPiece = Cast<APiece>(ClickResult.GetActor());
+			}
+			
+			if (pPreviousClickedPiece)
+			{
+				pPreviousClickedPiece->HighlightedPieceGrab();
+			}
+
+			pClickedPiece->HighlightedPieceGrab();
+			
+		}
+	}
+
+	if (pClickedPiece && pClickedTile)
+	{
+
 	}
 }
 
