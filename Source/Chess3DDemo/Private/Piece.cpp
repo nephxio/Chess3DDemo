@@ -67,14 +67,14 @@ void APiece::InitializePiece(EPlayerColor Player)
 	IsPieceHighlighted = false;
 }
 
-void APiece::SetOccupyingTile(ATile * pTile)
+void APiece::SetOccupyingTile(ATile* pTile)
 {
-	pTileCurrentlyOccupying = pTile;
+	pTileCurrentlyOccupying = TWeakObjectPtr<ATile>(pTile);
 }
 
-ATile * APiece::GetOccupyingTile()
+ATile* APiece::GetOccupyingTile()
 {
-	return pTileCurrentlyOccupying;
+	return pTileCurrentlyOccupying.Get();
 }
 
 UMaterialInstanceDynamic* APiece::GetDynamicMaterial()

@@ -49,10 +49,10 @@ public:
 	
 	void InitializePiece(EPlayerColor Player);
 
-	UFUNCTION(BlueprintCallable, Category = "Object Initialization")
+//	UFUNCTION(BlueprintCallable, Category = "Object Initialization")
 	void SetOccupyingTile(ATile* pTile);
 
-	UFUNCTION(BlueprintCallable, Category = "Object Initialization")
+//	UFUNCTION(BlueprintCallable, Category = "Object Initialization")
 	ATile* GetOccupyingTile();
 
 	UFUNCTION(BlueprintCallable, Category = "Object Initialization")
@@ -61,11 +61,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Position")
 	FVector2D GetBoardLocation();
 
-	UFUNCTION(BlueprintCallable, Category = "Piece")
-	bool GetIsDead() {	return IsDead;	}
+//	UFUNCTION(BlueprintCallable, Category = "Piece")
+	FORCEINLINE bool GetIsDead() {	return IsDead;	}
 
-	UFUNCTION(BlueprintCallable, Category = "Piece")
-	void SetIsDead() { IsDead = true; }
+//	UFUNCTION(BlueprintCallable, Category = "Piece")
+	FORCEINLINE void SetIsDead() { IsDead = true; }
 
 	TArray<ATile*> GetValidMovesInDirection(int PrimaryDirection, int SecondaryDirection = -1);
 
@@ -73,14 +73,12 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	//reference to the Chess Board
-//	AChessBoard* pGameBoard;
-
 	//Static Mesh Component
 	UPROPERTY(EditDefaultsOnly, Category = "Mesh")
 	UStaticMeshComponent* ObjectMesh;
 
 	//Material for setting Piece color
+	UPROPERTY(EditDefaultsOnly, Category = "Material")
 	UMaterialInstanceDynamic* pDynamicMaterial;
 
 	//Represents player color
@@ -90,7 +88,7 @@ protected:
 	bool IsPieceHighlighted = false;
 
 	//Link to tile currently on
-	class ATile* pTileCurrentlyOccupying;
+	TWeakObjectPtr<ATile> pTileCurrentlyOccupying;
 
 public:	
 	// Called every frame

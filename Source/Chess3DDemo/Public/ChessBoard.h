@@ -42,9 +42,6 @@ public:
 	APiece* SpawnPiece(ATile* pTile, TSubclassOf<APiece> PieceToSpawn, EPlayerColor Player);
 
 	UFUNCTION(BlueprintCallable, Category = "Pieces")
-	void MovePiece(ATile* pDestinationTile, APiece* pPieceToMove);
-
-	UFUNCTION(BlueprintCallable, Category = "Pieces")
 	FORCEINLINE TArray<APiece*> GetBlackPieces() { return PlayerBlack; }
 
 	UFUNCTION(BlueprintCallable, Category = "Pieces")

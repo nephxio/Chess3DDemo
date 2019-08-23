@@ -58,7 +58,28 @@ void AMouse_PlayerController::ClickOnObject()
 
 	if (pClickedPiece && pClickedTile)
 	{
-
+		MovePiece(pClickedTile, pClickedPiece);
+		pClickedPiece = nullptr;
+		pClickedTile = nullptr;
 	}
 }
 
+void AMouse_PlayerController::MovePiece(ATile* pDestinationTile, APiece* pPieceToMove)
+{
+	FTransform SocketLocation, MoveLocation;
+	FVector Components = pDestinationTile->GetMesh()->GetSocketLocation(FName("Piece"));
+
+	if (pPieceToMove->GetOccupyingTile())
+	{
+		pPieceToMove->GetOccupyingTile()->SetTileIsOccupied(EPlayerColor::PLAYER_NONE, nullptr);
+	}
+
+	pPieceToMove->SetActorLocation(Components);
+
+	if (pDestinationTile)
+	{
+		pPieceToMove->SetOccupyingTile(pDestinationTile);
+	}
+
+	pPieceToMove->SetIsHighlighted();
+}

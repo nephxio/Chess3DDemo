@@ -27,7 +27,7 @@ public:
 	void ChangeTint(FColor Color);
 
 	UFUNCTION(BlueprintCallable, Category = "Color Changing")
-	void ResetTile() { pDynamicMaterial->SetVectorParameterValue("Tint", PlayerColor); }
+	void ResetTile() { pDynamicMaterial->SetVectorParameterValue(FName("Tint"), PlayerColor); }
 
 	UFUNCTION(BlueprintCallable, Category = "Initialization")
 	bool ChangeHighlight();
@@ -37,6 +37,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Tiles")
 	APiece* GetOccupyingPiece();
+
+	UFUNCTION(BlueprintCallable, Category = "Mesh")
+	UStaticMeshComponent* GetMesh() { return pObjectMesh; }
 
 	//Sets tile occupation status.
 	void SetTileIsOccupied(EPlayerColor Status, APiece* pOccupyingPiece);
@@ -65,7 +68,7 @@ protected:
 
 	//Static Mesh Component
 	UPROPERTY(EditDefaultsOnly, Category = "Mesh")
-	UStaticMeshComponent* ObjectMesh;
+	UStaticMeshComponent* pObjectMesh;
 
 	//Material for setting Piece color
 	UMaterialInstanceDynamic* pDynamicMaterial;
@@ -82,7 +85,7 @@ protected:
 
 private:
 	//Reference to occupying piece
-	APiece* pOccupiedBy;
+	TWeakObjectPtr<APiece> pOccupiedBy;
 
 	//if Tile is Occupied.  0 for unoccupied, 1 for White, 2 for Black
 	EPlayerColor IsOccupied;

@@ -24,6 +24,8 @@ public:
 
 	void ClickOnObject();
 
+	void MovePiece(ATile* pDestinationTile, APiece* pPieceToMove);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

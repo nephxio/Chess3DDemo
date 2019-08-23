@@ -152,34 +152,3 @@ void AChessBoard::SpawnInitialPlayerPieces()
 	}
 	
 }
-
-void AChessBoard::MovePiece(ATile* pDestinationTile, APiece* pPieceToMove)
-{
-	FTransform SocketLocation,MoveLocation;
-	TArray<UStaticMeshComponent*> Components;
-	pDestinationTile->GetComponents<UStaticMeshComponent>(Components);
-
-	if (pPieceToMove->GetOccupyingTile())
-	{
-		pPieceToMove->GetOccupyingTile()->SetTileIsOccupied(EPlayerColor::PLAYER_NONE, nullptr);
-	}
-		
-	//SocketLocation.SetComponents(Components[0]->GetSocketRotation("Piece").Quaternion(), Components[0]->GetSocketLocation("Piece"), pPieceToMove->GetActorScale());
-
-	////Ensure Knights don't turn around
-	//MoveLocation.SetLocation(SocketLocation.GetLocation());
-	//MoveLocation.SetRotation(pPieceToMove->GetActorRotation().Quaternion());
-	//MoveLocation.SetScale3D(pPieceToMove->GetActorScale()); //ensure the piece doesn't resize if we set custom sizes in the blueprint
-	//
-
-	//pPieceToMove->SetActorTransform(MoveLocation);
-
-	pPieceToMove->SetActorLocation(Components[0]->GetSocketLocation("Piece"));
-
-	if (pDestinationTile)
-	{
-		pPieceToMove->SetOccupyingTile(pDestinationTile);
-	}
-
-	pPieceToMove->SetIsHighlighted();
-}

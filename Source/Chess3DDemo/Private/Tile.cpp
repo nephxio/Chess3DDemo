@@ -5,13 +5,13 @@
 
 
 // Sets default values
-ATile::ATile() : pNeighbors{ nullptr, nullptr, nullptr, nullptr }, pOccupiedBy{ nullptr }, IsOccupied{ EPlayerColor::PLAYER_NONE }
+ATile::ATile() : pNeighbors{ nullptr,nullptr,nullptr,nullptr }, pOccupiedBy{ nullptr }, IsOccupied{ EPlayerColor::PLAYER_NONE }
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	ObjectMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Object Mesh"));
-	RootComponent = ObjectMesh;
+	pObjectMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Object Mesh"));
+	RootComponent = pObjectMesh;
 }
 
 // Called when the game starts or when spawned
@@ -86,7 +86,7 @@ FVector2D ATile::GetBoardCoordinate()
 
 APiece* ATile::GetOccupyingPiece()
 {
-	return pOccupiedBy;
+	return pOccupiedBy.Get();
 }
 
 UMaterialInstanceDynamic* ATile::GetDynamicMaterial()
