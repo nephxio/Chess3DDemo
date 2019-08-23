@@ -7,6 +7,23 @@
 #include "GameFramework/Actor.h"
 #include "ChessBoard.generated.h"
 
+//#define PIECE_BISHOP	Pieces[0]
+//#define PIECE_KING		Pieces[1]
+//#define PIECE_KNIGHT	Pieces[2]
+//#define PIECE_PAWN		Pieces[3]
+//#define PIECE_QUEEN		Pieces[4]
+//#define PIECE_ROOK		Pieces[5]
+
+UENUM()
+enum class EPieceType {
+	PIECE_NONE		UMETA(DisplayName = "None"),
+	PIECE_BISHOP	UMETA(DisplayName = "Bishop"),
+	PIECE_KING		UMETA(DisplayName = "King"),
+	PIECE_KNIGHT	UMETA(DisplayName = "Knight"),
+	PIECE_PAWN		UMETA(DisplayName = "Pawn"),
+	PIECE_QUEEN		UMETA(DisplayName = "Queen"),
+	PIECE_ROOK		UMETA(DisplayName = "Rook"),
+};
 
 
 UCLASS()
@@ -21,33 +38,33 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	//Blueprints for the Tiles to Spawn
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tile Blueprint")
-	TSubclassOf<ATile> TileBlueprint;
-
-	//Blueprints for spawning Pieces
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Piece Blueprints")
-	TArray<TSubclassOf<APiece>> Pieces;
-
-	//Spawns a Bishop
-	UFUNCTION(BlueprintCallable, Category = "Pieces")
-	APiece* SpawnPiece(ATile* pTile, TSubclassOf<APiece> PieceToSpawn, int Player);
+	//Spawns a piece
+	APiece* SpawnPiece(ATile* pTile, TSubclassOf<APiece> PieceToSpawn, EPlayerColor Player);
 
 	UFUNCTION(BlueprintCallable, Category = "Pieces")
 	void MovePiece(ATile* pDestinationTile, APiece* pPieceToMove);
 
 	UFUNCTION(BlueprintCallable, Category = "Pieces")
-	TArray<APiece*> GetBlackPieces() { return PlayerBlack; }
+	FORCEINLINE TArray<APiece*> GetBlackPieces() { return PlayerBlack; }
 
 	UFUNCTION(BlueprintCallable, Category = "Pieces")
-	TArray<APiece*> GetWhitePieces() { return PlayerWhite; }
+	FORCEINLINE TArray<APiece*> GetWhitePieces() { return PlayerWhite; }
 	
 	//Gets pointer from Board to tile at coord (x,y)
 	UFUNCTION(BlueprintCallable, Category = "Chess Tiles")
 	ATile* GetTile(int x, int y);
 
 	UFUNCTION(BlueprintCallable, Category = "Board")
-	TArray<ATile*> GetBoard() { return Board; }
+	FORCEINLINE TArray<ATile*> GetBoard() { return Board; }
+
+	//Blueprints for the Tiles to Spawn
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tile Blueprint")
+	TSubclassOf<ATile> TileBlueprint;
+
+	//Blueprints for spawning Pieces
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Piece Blueprints")
+	TMap<EPieceType, TSubclassOf<APiece>> Pieces;
+
 
 protected:
 	// Called when the game starts or when spawned

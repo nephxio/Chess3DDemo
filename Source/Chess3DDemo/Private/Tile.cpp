@@ -5,17 +5,10 @@
 
 
 // Sets default values
-ATile::ATile()
+ATile::ATile() : pNeighbors{ nullptr, nullptr, nullptr, nullptr }, pOccupiedBy{ nullptr }, IsOccupied{ EPlayerColor::PLAYER_NONE }
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
-	pOccupiedBy = nullptr;
-
-	pNeighbors[0] = nullptr;
-	pNeighbors[1] = nullptr;
-	pNeighbors[2] = nullptr;
-	pNeighbors[3] = nullptr;
 
 	ObjectMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Object Mesh"));
 	RootComponent = ObjectMesh;
@@ -35,17 +28,17 @@ void ATile::Tick(float DeltaTime)
 
 }
 
-void ATile::InitializePiece(int Player)
+void ATile::InitializePiece(EPlayerColor Player)
 {
 	FLinearColor PieceColor;
 	TArray<UStaticMeshComponent*> Components;
 
-	if (Player == PLAYER_BLACK)
+	if (Player == EPlayerColor::PLAYER_BLACK)
 	{
 		PieceColor = FLinearColor::Black;
 		PlayerColor = FLinearColor::Black;
 	}
-	else if (Player == PLAYER_WHITE)
+	else if (Player == EPlayerColor::PLAYER_WHITE)
 	{
 		PieceColor = FLinearColor::White;
 		PlayerColor = FLinearColor::White;
@@ -69,12 +62,12 @@ void ATile::InitializePiece(int Player)
 
 bool ATile::GetTileIsOccupied()
 {
-	if (IsOccupied == 0)
+	if (IsOccupied == EPlayerColor::PLAYER_NONE)
 		return false;
 	return true;
 }
 
-void ATile::SetTileIsOccupied(int Status, APiece* pOccupyingPiece)
+void ATile::SetTileIsOccupied(EPlayerColor Status, APiece* pOccupyingPiece)
 {
 	IsOccupied = Status;
 	pOccupiedBy = pOccupyingPiece;

@@ -35,20 +35,20 @@ void APiece::Tick(float DeltaTime)
 }
 
 //Initialize Piece because UE4 is dumb
-void APiece::InitializePiece(int Player)
+void APiece::InitializePiece(EPlayerColor Player)
 {
 	FLinearColor PieceColor;
 	TArray<UStaticMeshComponent*> Components;
 
-	if (Player == PLAYER_BLACK)
+	if (Player == EPlayerColor::PLAYER_BLACK)
 	{
 		PieceColor = FLinearColor(FColor(70.f, 70.f, 70.f));
-		PlayerColor = PLAYER_BLACK;
+		PlayerColor = EPlayerColor::PLAYER_BLACK;
 	}
-	else if (Player == PLAYER_WHITE)
+	else if (Player == EPlayerColor::PLAYER_WHITE)
 	{
 		PieceColor = FLinearColor::White;
-		PlayerColor = PLAYER_WHITE;
+		PlayerColor = EPlayerColor::PLAYER_WHITE;
 	}
 	else
 	{
@@ -88,11 +88,6 @@ FVector2D APiece::GetBoardLocation()
 	return Vect;
 }
 
-void APiece::SetBoardReference(AChessBoard * const pBoard)
-{
-	pGameBoard = pBoard;
-}
-
 TArray<ATile*> APiece::GetValidMovesInDirection(int PrimaryDirection, int SecondaryDirection)
 {
 	TArray<ATile*> pValidMoves;
@@ -124,12 +119,10 @@ void APiece::HighlightedPieceGrab()
 	if (!IsPieceHighlighted)
 	{
 		PieceLoc.Z += 50.f;
-//		SetActorLocation(PieceLoc);
 	}
 	else if (IsPieceHighlighted)
 	{
 		PieceLoc.Z -= 50.f;
-//		SetActorLocation(PieceLoc);
 	}
 	else
 	{
@@ -179,7 +172,7 @@ void APiece::SetIsHighlighted()
 	}
 }
 
-int APiece::GetPlayerColor()
+EPlayerColor APiece::GetPlayerColor()
 {
 	return PlayerColor;
 }
@@ -198,44 +191,59 @@ TArray<ATile*> APieceBishop::GetValidMoves()
 
 TArray<ATile*> APieceKing::GetValidMoves()
 {
-	ATile* pTileToCheck = GetOccupyingTile();
-
-	TArray<int> TilesToRemove;
 	TArray<ATile*> pValidMoves;
-	TArray<FVector2D> TileOffsets = {
-		FVector2D(0,1), FVector2D(1,1),
-		FVector2D(1,0), FVector2D(1,-1),
-		FVector2D(0,-1), FVector2D(-1,-1),
-		FVector2D(-1,0), FVector2D(-1,1) };
 
-	for (int x = 0; x < 8; x++)
-	{
-		int XCoord = TileOffsets[x].X + pTileToCheck->GetBoardCoordinate().X;
-		int YCoord = TileOffsets[x].Y + pTileToCheck->GetBoardCoordinate().Y;
 
-		if (((XCoord <= 8) && (XCoord > 0))
-			&& ((YCoord <= 8) && (YCoord > 0)))
-		{
-			pValidMoves.Add(pGameBoard->GetTile(XCoord, YCoord));
-		}
-	}
 
-	for (int x = 0; x < pValidMoves.Num(); x++)
-	{
-		if (pValidMoves[x]->GetTileIsOccupied())
-		{
-			if (GetPlayerColor() == pValidMoves[x]->GetOccupyingPiece()->GetPlayerColor())
-			{
-				TilesToRemove.Add(x);
-			}
-		}
-	}
+	return pValidMoves;
 
-	while (TilesToRemove.Num() != 0)
-	{
-		int x = TilesToRemove.Pop();
-		pValidMoves.RemoveAt(x);
-	}
+}
+
+TArray<ATile*> APieceKnight::GetValidMoves()
+{
+	TArray<ATile*> pValidMoves;
+
+
+
+	return pValidMoves;
+
+}
+
+TArray<ATile*> APiecePawn::GetValidMoves()
+{
+	TArray<ATile*> pValidMoves;
+
+
+
+	return pValidMoves;
+
+}
+
+TArray<ATile*> APieceQueen::GetValidMoves()
+{
+	TArray<ATile*> pValidMoves;
+
+	pValidMoves += GetValidMovesInDirection(TILE_NORTH, TILE_EAST);
+	pValidMoves += GetValidMovesInDirection(TILE_NORTH, TILE_WEST);
+	pValidMoves += GetValidMovesInDirection(TILE_SOUTH, TILE_EAST);
+	pValidMoves += GetValidMovesInDirection(TILE_SOUTH, TILE_WEST);
+	pValidMoves += GetValidMovesInDirection(TILE_NORTH);
+	pValidMoves += GetValidMovesInDirection(TILE_SOUTH);
+	pValidMoves += GetValidMovesInDirection(TILE_EAST);
+	pValidMoves += GetValidMovesInDirection(TILE_WEST);
+
+	return pValidMoves;
+
+}
+
+TArray<ATile*> APieceRook::GetValidMoves()
+{
+	TArray<ATile*> pValidMoves;
+
+	pValidMoves += GetValidMovesInDirection(TILE_NORTH);
+	pValidMoves += GetValidMovesInDirection(TILE_SOUTH);
+	pValidMoves += GetValidMovesInDirection(TILE_EAST);
+	pValidMoves += GetValidMovesInDirection(TILE_WEST);
 
 	return pValidMoves;
 

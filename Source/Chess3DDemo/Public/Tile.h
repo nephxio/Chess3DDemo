@@ -39,8 +39,7 @@ public:
 	APiece* GetOccupyingPiece();
 
 	//Sets tile occupation status.
-	UFUNCTION(BlueprintCallable, Category = "Tiles")
-	void SetTileIsOccupied(int Status, APiece* pOccupyingPiece);
+	void SetTileIsOccupied(EPlayerColor Status, APiece* pOccupyingPiece);
 
 	UFUNCTION(BlueprintCallable, Category = "Position")
 	void SetBoardCoordinate(int XCoord, int YCoord);
@@ -48,8 +47,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Position")
 	FVector2D GetBoardCoordinate();
 
-	UFUNCTION(BlueprintCallable, Category = "Initialization")
-	void InitializePiece(int Player);
+	void InitializePiece(EPlayerColor Player);
 
 	UFUNCTION(BlueprintCallable, Category = "Object Initialization")
 	UMaterialInstanceDynamic* GetDynamicMaterial();
@@ -87,5 +85,5 @@ private:
 	APiece* pOccupiedBy;
 
 	//if Tile is Occupied.  0 for unoccupied, 1 for White, 2 for Black
-	int IsOccupied;
+	EPlayerColor IsOccupied;
 };

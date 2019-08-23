@@ -58,7 +58,7 @@ void AChessBoard::LinkTiles()
 	}
 }
 
-APiece* AChessBoard::SpawnPiece(ATile* pTile, TSubclassOf<APiece> PieceToSpawn, int Player)
+APiece* AChessBoard::SpawnPiece(ATile* pTile, TSubclassOf<APiece> PieceToSpawn, EPlayerColor Player)
 {
 	APiece* pPiece;
 	TArray<UStaticMeshComponent*> Components;
@@ -68,11 +68,11 @@ APiece* AChessBoard::SpawnPiece(ATile* pTile, TSubclassOf<APiece> PieceToSpawn, 
 
 	pPiece->InitializePiece(Player);
 
-	if (Player == PLAYER_BLACK)
+	if (Player == EPlayerColor::PLAYER_BLACK)
 	{
 		PlayerBlack.Add(pPiece);
 	}
-	else if (Player == PLAYER_WHITE)
+	else if (Player == EPlayerColor::PLAYER_WHITE)
 	{
 		PlayerWhite.Add(pPiece);
 	}
@@ -83,7 +83,7 @@ APiece* AChessBoard::SpawnPiece(ATile* pTile, TSubclassOf<APiece> PieceToSpawn, 
 	}
 
 	pPiece->SetOccupyingTile(pTile);
-	pPiece->SetBoardReference(this);
+//	pPiece->SetBoardReference(this);
 
 	return pPiece;
 }
@@ -104,17 +104,16 @@ void AChessBoard::SpawnBoard()
 			if (!((x + y) % 2))
 			{
 				SpawnedTile = GetWorld()->SpawnActor<ATile>(TileBlueprint, FVector(y*200.0f, x*200.0f, 0.0f), FRotator(0.0f, 0.0f, 0.0f));
-				SpawnedTile->InitializePiece(PLAYER_BLACK);
+				SpawnedTile->InitializePiece(EPlayerColor::PLAYER_BLACK);
 			}
 			else
 			{
 				SpawnedTile = GetWorld()->SpawnActor<ATile>(TileBlueprint, FVector(y*200.0f, x*200.0f, 0.0f), FRotator(0.0f, 0.0f, 0.0f));
-				SpawnedTile->InitializePiece(PLAYER_WHITE);
+				SpawnedTile->InitializePiece(EPlayerColor::PLAYER_WHITE);
 			}
 			Board.Add(SpawnedTile);
 			SpawnedTile->SetBoardCoordinate(x+1, y+1);
 			UE_LOG(LogTemp, Warning, TEXT("Setting coordinate X=%d, Y=%d"), x, y);
-			SpawnedTile->SetTileIsOccupied(0, nullptr);		//set tile as unoccupied
 		}
 	}
 }
@@ -123,33 +122,33 @@ void AChessBoard::SpawnInitialPlayerPieces()
 {
 
 	//spawn Black Pieces
-	GetTile(1, 8)->SetTileIsOccupied(PLAYER_BLACK, SpawnPiece(GetTile(1, 8), PIECE_ROOK, PLAYER_BLACK));
-	GetTile(2, 8)->SetTileIsOccupied(PLAYER_BLACK, SpawnPiece(GetTile(2, 8), PIECE_KNIGHT, PLAYER_BLACK));
-	GetTile(3, 8)->SetTileIsOccupied(PLAYER_BLACK, SpawnPiece(GetTile(3, 8), PIECE_BISHOP, PLAYER_BLACK));
-	GetTile(4, 8)->SetTileIsOccupied(PLAYER_BLACK, SpawnPiece(GetTile(4, 8), PIECE_QUEEN, PLAYER_BLACK));
-	GetTile(5, 8)->SetTileIsOccupied(PLAYER_BLACK, SpawnPiece(GetTile(5, 8), PIECE_KING, PLAYER_BLACK));
-	GetTile(6, 8)->SetTileIsOccupied(PLAYER_BLACK, SpawnPiece(GetTile(6, 8), PIECE_BISHOP, PLAYER_BLACK));
-	GetTile(7, 8)->SetTileIsOccupied(PLAYER_BLACK, SpawnPiece(GetTile(7, 8), PIECE_KNIGHT, PLAYER_BLACK));
-	GetTile(8, 8)->SetTileIsOccupied(PLAYER_BLACK, SpawnPiece(GetTile(8, 8), PIECE_ROOK, PLAYER_BLACK));
+	GetTile(1, 8)->SetTileIsOccupied(EPlayerColor::PLAYER_BLACK, SpawnPiece(GetTile(1, 8), Pieces[EPieceType::PIECE_ROOK], EPlayerColor::PLAYER_BLACK));
+	GetTile(2, 8)->SetTileIsOccupied(EPlayerColor::PLAYER_BLACK, SpawnPiece(GetTile(2, 8), Pieces[EPieceType::PIECE_KNIGHT], EPlayerColor::PLAYER_BLACK));
+	GetTile(3, 8)->SetTileIsOccupied(EPlayerColor::PLAYER_BLACK, SpawnPiece(GetTile(3, 8), Pieces[EPieceType::PIECE_BISHOP], EPlayerColor::PLAYER_BLACK));
+	GetTile(4, 8)->SetTileIsOccupied(EPlayerColor::PLAYER_BLACK, SpawnPiece(GetTile(4, 8), Pieces[EPieceType::PIECE_QUEEN], EPlayerColor::PLAYER_BLACK));
+	GetTile(5, 8)->SetTileIsOccupied(EPlayerColor::PLAYER_BLACK, SpawnPiece(GetTile(5, 8), Pieces[EPieceType::PIECE_KING], EPlayerColor::PLAYER_BLACK));
+	GetTile(6, 8)->SetTileIsOccupied(EPlayerColor::PLAYER_BLACK, SpawnPiece(GetTile(6, 8), Pieces[EPieceType::PIECE_BISHOP], EPlayerColor::PLAYER_BLACK));
+	GetTile(7, 8)->SetTileIsOccupied(EPlayerColor::PLAYER_BLACK, SpawnPiece(GetTile(7, 8), Pieces[EPieceType::PIECE_KNIGHT], EPlayerColor::PLAYER_BLACK));
+	GetTile(8, 8)->SetTileIsOccupied(EPlayerColor::PLAYER_BLACK, SpawnPiece(GetTile(8, 8), Pieces[EPieceType::PIECE_ROOK], EPlayerColor::PLAYER_BLACK));
 
 
 	//spawn White Pieces
-	GetTile(1, 1)->SetTileIsOccupied(PLAYER_WHITE, SpawnPiece(GetTile(1, 1), PIECE_ROOK, PLAYER_WHITE));
-	GetTile(2, 1)->SetTileIsOccupied(PLAYER_WHITE, SpawnPiece(GetTile(2, 1), PIECE_KNIGHT, PLAYER_WHITE));
+	GetTile(1, 1)->SetTileIsOccupied(EPlayerColor::PLAYER_WHITE, SpawnPiece(GetTile(1, 1), Pieces[EPieceType::PIECE_ROOK], EPlayerColor::PLAYER_WHITE));
+	GetTile(2, 1)->SetTileIsOccupied(EPlayerColor::PLAYER_WHITE, SpawnPiece(GetTile(2, 1), Pieces[EPieceType::PIECE_KNIGHT], EPlayerColor::PLAYER_WHITE));
 	GetTile(2, 1)->GetOccupyingPiece()->SetActorRelativeRotation(FRotator(0.f, 180.f, 0.f));
-	GetTile(3, 1)->SetTileIsOccupied(PLAYER_WHITE, SpawnPiece(GetTile(3, 1), PIECE_BISHOP, PLAYER_WHITE));
-	GetTile(4, 1)->SetTileIsOccupied(PLAYER_WHITE, SpawnPiece(GetTile(4, 1), PIECE_QUEEN, PLAYER_WHITE));
-	GetTile(5, 1)->SetTileIsOccupied(PLAYER_WHITE, SpawnPiece(GetTile(5, 1), PIECE_KING, PLAYER_WHITE));
-	GetTile(6, 1)->SetTileIsOccupied(PLAYER_WHITE, SpawnPiece(GetTile(6, 1), PIECE_BISHOP, PLAYER_WHITE));
-	GetTile(7, 1)->SetTileIsOccupied(PLAYER_WHITE, SpawnPiece(GetTile(7, 1), PIECE_KNIGHT, PLAYER_WHITE));
+	GetTile(3, 1)->SetTileIsOccupied(EPlayerColor::PLAYER_WHITE, SpawnPiece(GetTile(3, 1), Pieces[EPieceType::PIECE_BISHOP], EPlayerColor::PLAYER_WHITE));
+	GetTile(4, 1)->SetTileIsOccupied(EPlayerColor::PLAYER_WHITE, SpawnPiece(GetTile(4, 1), Pieces[EPieceType::PIECE_QUEEN], EPlayerColor::PLAYER_WHITE));
+	GetTile(5, 1)->SetTileIsOccupied(EPlayerColor::PLAYER_WHITE, SpawnPiece(GetTile(5, 1), Pieces[EPieceType::PIECE_KING], EPlayerColor::PLAYER_WHITE));
+	GetTile(6, 1)->SetTileIsOccupied(EPlayerColor::PLAYER_WHITE, SpawnPiece(GetTile(6, 1), Pieces[EPieceType::PIECE_BISHOP], EPlayerColor::PLAYER_WHITE));
+	GetTile(7, 1)->SetTileIsOccupied(EPlayerColor::PLAYER_WHITE, SpawnPiece(GetTile(7, 1), Pieces[EPieceType::PIECE_KNIGHT], EPlayerColor::PLAYER_WHITE));
 	GetTile(7, 1)->GetOccupyingPiece()->SetActorRelativeRotation(FRotator(0.f, 180.f, 0.f));
-	GetTile(8, 1)->SetTileIsOccupied(PLAYER_WHITE, SpawnPiece(GetTile(8, 1), PIECE_ROOK, PLAYER_WHITE));
+	GetTile(8, 1)->SetTileIsOccupied(EPlayerColor::PLAYER_WHITE, SpawnPiece(GetTile(8, 1), Pieces[EPieceType::PIECE_ROOK], EPlayerColor::PLAYER_WHITE));
 
 	//spawn Pawns
 	for (int x = 0; x < 8; x++)
 	{		
-		GetTile(x+1, 2)->SetTileIsOccupied(PLAYER_WHITE, SpawnPiece(GetTile(x + 1, 2), PIECE_PAWN, PLAYER_WHITE));
-		GetTile(x+1, 7)->SetTileIsOccupied(PLAYER_BLACK, SpawnPiece(GetTile(x + 1, 7), PIECE_PAWN, PLAYER_BLACK));
+		GetTile(x+1, 2)->SetTileIsOccupied(EPlayerColor::PLAYER_WHITE, SpawnPiece(GetTile(x + 1, 2), Pieces[EPieceType::PIECE_PAWN], EPlayerColor::PLAYER_WHITE));
+		GetTile(x+1, 7)->SetTileIsOccupied(EPlayerColor::PLAYER_BLACK, SpawnPiece(GetTile(x + 1, 7), Pieces[EPieceType::PIECE_PAWN], EPlayerColor::PLAYER_BLACK));
 	}
 	
 }
@@ -162,18 +161,20 @@ void AChessBoard::MovePiece(ATile* pDestinationTile, APiece* pPieceToMove)
 
 	if (pPieceToMove->GetOccupyingTile())
 	{
-		pPieceToMove->GetOccupyingTile()->SetTileIsOccupied(0, nullptr);
+		pPieceToMove->GetOccupyingTile()->SetTileIsOccupied(EPlayerColor::PLAYER_NONE, nullptr);
 	}
 		
-	SocketLocation.SetComponents(Components[0]->GetSocketRotation("Piece").Quaternion(), Components[0]->GetSocketLocation("Piece"), pPieceToMove->GetActorScale());
+	//SocketLocation.SetComponents(Components[0]->GetSocketRotation("Piece").Quaternion(), Components[0]->GetSocketLocation("Piece"), pPieceToMove->GetActorScale());
 
-	//Ensure Knights don't turn around
-	MoveLocation.SetLocation(SocketLocation.GetLocation());
-	MoveLocation.SetRotation(pPieceToMove->GetActorRotation().Quaternion());
-	MoveLocation.SetScale3D(pPieceToMove->GetActorScale()); //ensure the piece doesn't resize if we set custom sizes in the blueprint
-	
+	////Ensure Knights don't turn around
+	//MoveLocation.SetLocation(SocketLocation.GetLocation());
+	//MoveLocation.SetRotation(pPieceToMove->GetActorRotation().Quaternion());
+	//MoveLocation.SetScale3D(pPieceToMove->GetActorScale()); //ensure the piece doesn't resize if we set custom sizes in the blueprint
+	//
 
-	pPieceToMove->SetActorTransform(MoveLocation);
+	//pPieceToMove->SetActorTransform(MoveLocation);
+
+	pPieceToMove->SetActorLocation(Components[0]->GetSocketLocation("Piece"));
 
 	if (pDestinationTile)
 	{

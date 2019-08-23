@@ -5,29 +5,20 @@
 #include "GameFramework/Actor.h"
 #include "Piece.generated.h"
 
-#define PIECE_BISHOP	Pieces[0]
-#define PIECE_KING		Pieces[1]
-#define PIECE_KNIGHT	Pieces[2]
-#define PIECE_PAWN		Pieces[3]
-#define PIECE_QUEEN		Pieces[4]
-#define PIECE_ROOK		Pieces[5]
+UENUM()
+enum class EPlayerColor {
+	PLAYER_NONE,
+	PLAYER_WHITE,
+	PLAYER_BLACK,
+};
 
-#define PLAYER_WHITE		1
-#define PLAYER_BLACK		2
-
-enum class ETile_Direction : uint8 {
+UENUM()
+enum class ETileDirection : uint8 {
 	TILE_NORTH,
 	TILE_WEST,
 	TILE_SOUTH,
 	TILE_EAST,
 };
-
-//enum class Player_Color : int {
-//	PLAYER_WHITE,
-//	PLAYER_BLACK,
-//};
-
-
 
 UCLASS()
 class CHESS3DDEMO_API APiece : public AActor
@@ -54,10 +45,9 @@ public:
 	void SetIsHighlighted();
 
 	UFUNCTION(BlueprintCallable, Category = "Player Data")
-	int GetPlayerColor();
+	EPlayerColor GetPlayerColor();
 	
-	UFUNCTION(BlueprintCallable, Category = "Object Initialization")
-	void InitializePiece(int Player);
+	void InitializePiece(EPlayerColor Player);
 
 	UFUNCTION(BlueprintCallable, Category = "Object Initialization")
 	void SetOccupyingTile(ATile* pTile);
@@ -77,8 +67,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Piece")
 	void SetIsDead() { IsDead = true; }
 
-	void SetBoardReference(class AChessBoard* const pBoard);
-
 	TArray<ATile*> GetValidMovesInDirection(int PrimaryDirection, int SecondaryDirection = -1);
 
 protected:
@@ -86,7 +74,7 @@ protected:
 	virtual void BeginPlay() override;
 
 	//reference to the Chess Board
-	AChessBoard* pGameBoard;
+//	AChessBoard* pGameBoard;
 
 	//Static Mesh Component
 	UPROPERTY(EditDefaultsOnly, Category = "Mesh")
@@ -95,9 +83,8 @@ protected:
 	//Material for setting Piece color
 	UMaterialInstanceDynamic* pDynamicMaterial;
 
-	//Player Color: 1 is White, 2 is Black
-	UPROPERTY(EditAnywhere, Category = "Player Color")
-	int PlayerColor;
+	//Represents player color
+	EPlayerColor PlayerColor;
 
 	//If the piece is highlighted
 	bool IsPieceHighlighted = false;
@@ -127,12 +114,59 @@ class CHESS3DDEMO_API APieceBishop : public APiece
 		TArray<ATile*> GetValidMoves() override;
 };
 
-
 /**
  *
  */
 UCLASS()
 class CHESS3DDEMO_API APieceKing : public APiece
+{
+	GENERATED_BODY()
+
+		//	UFUNCTION(BlueprintCallable, Category = "Movement")
+		TArray<class ATile*> GetValidMoves() override;
+};
+
+/**
+ *
+ */
+UCLASS()
+class CHESS3DDEMO_API APieceKnight : public APiece
+{
+	GENERATED_BODY()
+
+		//	UFUNCTION(BlueprintCallable, Category = "Movement")
+		TArray<class ATile*> GetValidMoves() override;
+};
+
+/**
+ *
+ */
+UCLASS()
+class CHESS3DDEMO_API APiecePawn : public APiece
+{
+	GENERATED_BODY()
+
+		//	UFUNCTION(BlueprintCallable, Category = "Movement")
+		TArray<class ATile*> GetValidMoves() override;
+};
+
+/**
+ *
+ */
+UCLASS()
+class CHESS3DDEMO_API APieceQueen : public APiece
+{
+	GENERATED_BODY()
+
+		//	UFUNCTION(BlueprintCallable, Category = "Movement")
+		TArray<class ATile*> GetValidMoves() override;
+};
+
+/**
+ *
+ */
+UCLASS()
+class CHESS3DDEMO_API APieceRook : public APiece
 {
 	GENERATED_BODY()
 
