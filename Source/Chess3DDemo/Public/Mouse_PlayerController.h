@@ -19,9 +19,6 @@ public:
 	//Default Constructor
 	AMouse_PlayerController();
 
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
 	void ClickOnObject();
 
 	void MovePiece(ATile* pDestinationTile, APiece* pPieceToMove);

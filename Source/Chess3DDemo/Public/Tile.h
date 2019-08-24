@@ -20,9 +20,6 @@ public:
 	// Sets default values for this actor's properties
 	ATile();
 
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
 	UFUNCTION(BlueprintCallable, Category = "Color Changing")
 	void ChangeTint(FColor Color);
 
@@ -55,13 +52,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Object Initialization")
 	UMaterialInstanceDynamic* GetDynamicMaterial();
 
-	void SetAdjacentTile(int Direction, ATile* pTile) { pNeighbors[Direction] = pTile; }
+	FORCEINLINE void SetAdjacentTile(int Direction, ATile* pTile) { pNeighbors[Direction] = pTile; }
 
 	ATile* GetTileInDirection(int PrimaryDirection, int SecondaryDirection = -1);
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
 
 	//stores adjacent tiles in N/W/S/E directions, respectively
 	ATile* pNeighbors[4];

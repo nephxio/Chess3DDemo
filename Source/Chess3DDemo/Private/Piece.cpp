@@ -12,8 +12,8 @@ APiece::APiece() : IsPieceHighlighted { false }
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	ObjectMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Object Mesh"));
-	RootComponent = ObjectMesh;
+	pObjectMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Object Mesh"));
+	RootComponent = pObjectMesh;
 
 }
 
@@ -141,7 +141,7 @@ void APiece::HighlightedPieceGrab()
 
 bool APiece::ChangeHighlight()
 {
-	pDynamicMaterial = Cast<UMaterialInstanceDynamic>(ObjectMesh->GetMaterial(0));
+	pDynamicMaterial = Cast<UMaterialInstanceDynamic>(pObjectMesh->GetMaterial(0));
 
 	//If piece is not highlighted, highlight it, else remove highlight
 	if (!IsPieceHighlighted)

@@ -30,11 +30,6 @@ void AMouse_PlayerController::BeginPlay()
 	}
 }
 
-void AMouse_PlayerController::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-}
-
 void AMouse_PlayerController::ClickOnObject()
 {
 	FHitResult ClickResult;

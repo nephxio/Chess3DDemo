@@ -46,10 +46,10 @@ public:
 	
 	void InitializePiece(EPlayerColor Player);
 
-//	UFUNCTION(BlueprintCallable, Category = "Object Initialization")
+	UFUNCTION(BlueprintCallable, Category = "Object Initialization")
 	void SetOccupyingTile(ATile* pTile);
 
-//	UFUNCTION(BlueprintCallable, Category = "Object Initialization")
+	UFUNCTION(BlueprintCallable, Category = "Object Initialization")
 	ATile* GetOccupyingTile();
 
 	UFUNCTION(BlueprintCallable, Category = "Object Initialization")
@@ -59,7 +59,7 @@ public:
 	FVector2D GetBoardLocation();
 
 //	UFUNCTION(BlueprintCallable, Category = "Piece")
-	FORCEINLINE bool GetIsDead() {	return IsDead;	}
+	FORCEINLINE bool GetIsDead() { return IsDead; }
 
 //	UFUNCTION(BlueprintCallable, Category = "Piece")
 	FORCEINLINE void SetIsDead() { IsDead = true; }
@@ -72,7 +72,7 @@ protected:
 
 	//Static Mesh Component
 	UPROPERTY(EditDefaultsOnly, Category = "Mesh")
-	UStaticMeshComponent* ObjectMesh;
+	UStaticMeshComponent* pObjectMesh;
 
 	//Material for setting Piece color
 	UPROPERTY(EditDefaultsOnly, Category = "Material")
@@ -105,8 +105,9 @@ class CHESS3DDEMO_API APieceBishop : public APiece
 {
 	GENERATED_BODY()
 
-		//	UFUNCTION(BlueprintCallable, Category = "Movement")
-		TArray<ATile*> GetValidMoves() override;
+public:
+	//	UFUNCTION(BlueprintCallable, Category = "Movement")
+	virtual TArray<ATile*> GetValidMoves() override;
 };
 
 /**
@@ -117,8 +118,9 @@ class CHESS3DDEMO_API APieceKing : public APiece
 {
 	GENERATED_BODY()
 
-		//	UFUNCTION(BlueprintCallable, Category = "Movement")
-		TArray<class ATile*> GetValidMoves() override;
+public:
+	//	UFUNCTION(BlueprintCallable, Category = "Movement")
+	virtual TArray<class ATile*> GetValidMoves() override;
 };
 
 /**
@@ -129,8 +131,9 @@ class CHESS3DDEMO_API APieceKnight : public APiece
 {
 	GENERATED_BODY()
 
-		//	UFUNCTION(BlueprintCallable, Category = "Movement")
-		TArray<class ATile*> GetValidMoves() override;
+public:
+	//	UFUNCTION(BlueprintCallable, Category = "Movement")
+	virtual TArray<class ATile*> GetValidMoves() override;
 };
 
 /**
@@ -141,8 +144,9 @@ class CHESS3DDEMO_API APiecePawn : public APiece
 {
 	GENERATED_BODY()
 
-		//	UFUNCTION(BlueprintCallable, Category = "Movement")
-		TArray<class ATile*> GetValidMoves() override;
+public:
+	//	UFUNCTION(BlueprintCallable, Category = "Movement")
+	virtual TArray<class ATile*> GetValidMoves() override;
 };
 
 /**
@@ -153,8 +157,9 @@ class CHESS3DDEMO_API APieceQueen : public APiece
 {
 	GENERATED_BODY()
 
-		//	UFUNCTION(BlueprintCallable, Category = "Movement")
-		TArray<class ATile*> GetValidMoves() override;
+public:
+	//	UFUNCTION(BlueprintCallable, Category = "Movement")
+	virtual TArray<class ATile*> GetValidMoves() override;
 };
 
 /**
@@ -165,6 +170,7 @@ class CHESS3DDEMO_API APieceRook : public APiece
 {
 	GENERATED_BODY()
 
-		//	UFUNCTION(BlueprintCallable, Category = "Movement")
-		TArray<class ATile*> GetValidMoves() override;
+public:
+	//	UFUNCTION(BlueprintCallable, Category = "Movement")
+	virtual TArray<class ATile*> GetValidMoves() override;
 };
