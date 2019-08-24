@@ -51,11 +51,11 @@ void ATile::InitializePiece(EPlayerColor Player)
 	GetComponents<UStaticMeshComponent>(Components);
 
 	//Get the Static Mesh Component
-	pDynamicMaterial = UMaterialInstanceDynamic::Create(Components[0]->GetMaterial(0), this);
+	pDynamicMaterial = UMaterialInstanceDynamic::Create(pObjectMesh->GetMaterial(0), this);
 
 	//Set the tint parameter to Black or White
 	pDynamicMaterial->SetVectorParameterValue("Tint", PieceColor);
-	Components[0]->SetMaterial(0, pDynamicMaterial);
+	pObjectMesh->SetMaterial(0, pDynamicMaterial);
 
 	IsHighlighted = false;
 }
@@ -70,7 +70,7 @@ bool ATile::GetTileIsOccupied()
 void ATile::SetTileIsOccupied(EPlayerColor Status, APiece* pOccupyingPiece)
 {
 	IsOccupied = Status;
-	pOccupiedBy = pOccupyingPiece;
+	pOccupiedBy = TWeakObjectPtr<APiece>(pOccupyingPiece);
 }
 
 void ATile::SetBoardCoordinate(int XCoord, int YCoord)
@@ -132,11 +132,7 @@ void ATile::ChangeTint(FColor Color)
 
 bool ATile::ChangeHighlight()
 {
-	TArray<UStaticMeshComponent*> Components;
-
-	GetComponents<UStaticMeshComponent>(Components);
-
-	pDynamicMaterial = Cast<UMaterialInstanceDynamic>(Components[0]->GetMaterial(0));
+	pDynamicMaterial = Cast<UMaterialInstanceDynamic>(pObjectMesh->GetMaterial(0));
 
 	//If piece is not highlighted, highlight it, else remove highlight
 	if (IsHighlighted)

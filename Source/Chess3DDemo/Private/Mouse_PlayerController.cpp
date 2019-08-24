@@ -48,6 +48,7 @@ void AMouse_PlayerController::ClickOnObject()
 			if (pPreviousClickedPiece)
 			{
 				pPreviousClickedPiece->HighlightedPieceGrab();
+				pClickedPiece = nullptr;
 			}
 			else
 			{

@@ -82,7 +82,7 @@ protected:
 	EPlayerColor PlayerColor;
 
 	//If the piece is highlighted
-	bool IsPieceHighlighted = false;
+	bool IsPieceHighlighted;
 
 	//Link to tile currently on
 	TWeakObjectPtr<ATile> pTileCurrentlyOccupying;
