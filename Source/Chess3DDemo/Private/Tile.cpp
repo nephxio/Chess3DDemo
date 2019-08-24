@@ -5,7 +5,7 @@
 
 
 // Sets default values
-ATile::ATile() : pNeighbors{ nullptr,nullptr,nullptr,nullptr }, pOccupiedBy{ nullptr }, IsOccupied{ EPlayerColor::PLAYER_NONE }
+ATile::ATile() : pNeighbors{ nullptr,nullptr,nullptr,nullptr }, IsHighlighted{ false }, pOccupiedBy{ nullptr }, IsOccupied{ EPlayerColor::PLAYER_NONE }
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -86,6 +86,12 @@ FVector2D ATile::GetBoardCoordinate()
 
 APiece* ATile::GetOccupyingPiece()
 {
+	if (!pOccupiedBy.Get())
+	{
+		APiece* error = GetWorld()->SpawnActor<APiece>(TSubclassOf<APiecePawn>(), pObjectMesh->GetSocketLocation(FName("Piece")), pObjectMesh->GetSocketRotation(FName("Piece")));
+		UE_LOG(LogTemp, Error, TEXT("Tile %s piece is nullptr!"), *this->GetName());
+		return error;
+	}
 	return pOccupiedBy.Get();
 }
 
@@ -135,13 +141,15 @@ bool ATile::ChangeHighlight()
 	pDynamicMaterial = Cast<UMaterialInstanceDynamic>(pObjectMesh->GetMaterial(0));
 
 	//If piece is not highlighted, highlight it, else remove highlight
-	if (IsHighlighted)
+	if (!IsHighlighted)
 	{
 		pDynamicMaterial->SetScalarParameterValue("Intensity", 1.0f);
+		IsHighlighted = true;
 	}
 	else
 	{
 		pDynamicMaterial->SetScalarParameterValue("Intensity", 0.0f);
+		IsHighlighted = false;
 	}
 
 	return IsHighlighted;

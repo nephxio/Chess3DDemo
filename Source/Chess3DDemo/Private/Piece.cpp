@@ -130,6 +130,13 @@ void APiece::HighlightedPieceGrab()
 	}
 
 	ChangeHighlight();
+
+	TArray<ATile*> Moves = GetValidMoves();
+
+	for (ATile* Tile : Moves)
+	{
+		Tile->ChangeHighlight();
+	}
 }
 
 bool APiece::ChangeHighlight()

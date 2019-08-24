@@ -29,6 +29,9 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Widgets")
+	TSubclassOf<class UUserWidget> wGameUI;
 	
 private:
 	//Piece clicked on by user
@@ -36,6 +39,8 @@ private:
 
 	//Tile Clicked on by user
 	ATile* pClickedTile;
+
+	UUserWidget* GameUI;
 
 
 };

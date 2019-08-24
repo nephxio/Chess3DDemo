@@ -2,6 +2,7 @@
 
 #include "Mouse_PlayerController.h"
 #include "Chess3DDemo.h"
+#include "Blueprint/UserWidget.h"
 
 AMouse_PlayerController::AMouse_PlayerController()
 {
@@ -17,6 +18,16 @@ void AMouse_PlayerController::BeginPlay()
 
 	pClickedPiece = nullptr;
 	pClickedTile = nullptr;
+
+	if (wGameUI)
+	{
+		GameUI = CreateWidget<UUserWidget>(this, wGameUI);
+
+		if(GameUI)
+		{
+			GameUI->AddToViewport();
+		}
+	}
 }
 
 void AMouse_PlayerController::Tick(float DeltaTime)
@@ -27,7 +38,7 @@ void AMouse_PlayerController::Tick(float DeltaTime)
 void AMouse_PlayerController::ClickOnObject()
 {
 	FHitResult ClickResult;
-	APiece* pPreviousClickedPiece = pClickedPiece;
+	APiece* pPreviousClickedPiece  = pClickedPiece;
 
 	if (GetHitResultUnderCursorByChannel(UEngineTypes::ConvertToTraceType(ECC_Visibility), false, ClickResult))
 	{
@@ -45,18 +56,11 @@ void AMouse_PlayerController::ClickOnObject()
 				pClickedPiece = Cast<APiece>(ClickResult.GetActor());
 			}
 
-			if (pPreviousClickedPiece)
-			{
-				pPreviousClickedPiece->HighlightedPieceGrab();
-				pClickedPiece = nullptr;
-			}
-			else
-			{
-				pClickedPiece->HighlightedPieceGrab();
-			}
-			
+			pClickedPiece->HighlightedPieceGrab();
+
 		}
 	}
+
 
 	if (pClickedPiece && pClickedTile)
 	{
@@ -68,6 +72,11 @@ void AMouse_PlayerController::ClickOnObject()
 	{
 		pClickedPiece = nullptr;
 		pClickedTile = nullptr;
+	}
+	else if (pClickedPiece && pPreviousClickedPiece && !pClickedTile)
+	{
+		pPreviousClickedPiece->HighlightedPieceGrab();
+		pPreviousClickedPiece = pClickedPiece;
 	}
 }
 
@@ -86,6 +95,7 @@ void AMouse_PlayerController::MovePiece(ATile* pDestinationTile, APiece* pPieceT
 	if (pDestinationTile)
 	{
 		pPieceToMove->SetOccupyingTile(pDestinationTile);
+		pDestinationTile->SetTileIsOccupied(pPieceToMove->GetPlayerColor(), pPieceToMove);
 	}
 
 	pPieceToMove->HighlightedPieceGrab();
