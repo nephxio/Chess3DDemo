@@ -67,8 +67,6 @@ public:
 	TArray<ATile*> GetValidMovesInDirection(int PrimaryDirection, int SecondaryDirection = -1);
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
 
 	//Static Mesh Component
 	UPROPERTY(EditDefaultsOnly, Category = "Mesh")
@@ -86,10 +84,6 @@ protected:
 
 	//Link to tile currently on
 	TWeakObjectPtr<ATile> pTileCurrentlyOccupying;
-
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
 
 private:
 

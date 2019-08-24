@@ -27,13 +27,6 @@ void AChessBoard::BeginPlay()
 	SpawnInitialPlayerPieces();
 }
 
-// Called every frame
-void AChessBoard::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
-
 void AChessBoard::LinkTiles()
 {
 	//quick and dirty linking of adjacent tiles

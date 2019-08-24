@@ -17,23 +17,6 @@ APiece::APiece() : IsPieceHighlighted { false }
 
 }
 
-
-// Called when the game starts or when spawned
-void APiece::BeginPlay()
-{
-	Super::BeginPlay();
-
-	
-
-}
-
-// Called every frame
-void APiece::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
-
 //Initialize Piece because UE4 is dumb
 void APiece::InitializePiece(EPlayerColor Player)
 {

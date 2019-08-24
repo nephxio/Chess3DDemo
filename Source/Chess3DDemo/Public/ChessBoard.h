@@ -35,9 +35,6 @@ public:
 	// Sets default values for this actor's properties
 	AChessBoard();
 
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
 	//Spawns a piece
 	APiece* SpawnPiece(ATile* pTile, TSubclassOf<APiece> PieceToSpawn, EPlayerColor Player);
 
