@@ -41,9 +41,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Highlighting")
 	bool IsHighlighted();
 
-	UFUNCTION(BlueprintCallable, Category = "Highlighting")
-	void SetIsHighlighted();
-
 	UFUNCTION(BlueprintCallable, Category = "Player Data")
 	EPlayerColor GetPlayerColor();
 	

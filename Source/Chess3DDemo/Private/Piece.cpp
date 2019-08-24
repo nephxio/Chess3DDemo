@@ -130,25 +130,22 @@ void APiece::HighlightedPieceGrab()
 	}
 
 	ChangeHighlight();
-	SetIsHighlighted();
 }
 
 bool APiece::ChangeHighlight()
 {
-	TArray<UStaticMeshComponent*> Components;
-
-	GetComponents<UStaticMeshComponent>(Components);
-
-	pDynamicMaterial = Cast<UMaterialInstanceDynamic>(Components[0]->GetMaterial(0));
+	pDynamicMaterial = Cast<UMaterialInstanceDynamic>(ObjectMesh->GetMaterial(0));
 
 	//If piece is not highlighted, highlight it, else remove highlight
 	if (!IsPieceHighlighted)
 	{
 		pDynamicMaterial->SetScalarParameterValue("Intensity", 1.0f);
+		IsPieceHighlighted = true;
 	}
 	else
 	{
 		pDynamicMaterial->SetScalarParameterValue("Intensity", 0.0f);
+		IsPieceHighlighted = false;
 	}
 
 	return IsPieceHighlighted;
@@ -158,18 +155,6 @@ bool APiece::ChangeHighlight()
 bool APiece::IsHighlighted()
 {
 	return IsPieceHighlighted;
-}
-
-void APiece::SetIsHighlighted()
-{
-	if (IsPieceHighlighted)
-	{
-		IsPieceHighlighted = false;
-	}
-	else
-	{
-		IsPieceHighlighted = true;
-	}
 }
 
 EPlayerColor APiece::GetPlayerColor()

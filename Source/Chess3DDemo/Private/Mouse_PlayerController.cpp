@@ -31,7 +31,6 @@ void AMouse_PlayerController::ClickOnObject()
 
 	if (GetHitResultUnderCursorByChannel(UEngineTypes::ConvertToTraceType(ECC_Visibility), false, ClickResult))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("%s was clicked."), *ClickResult.Actor->GetName());
 		if (ClickResult.GetActor()->IsA(ATile::StaticClass()))
 		{
 			if (Cast<ATile>(ClickResult.GetActor()))
@@ -45,13 +44,15 @@ void AMouse_PlayerController::ClickOnObject()
 			{
 				pClickedPiece = Cast<APiece>(ClickResult.GetActor());
 			}
-			
+
 			if (pPreviousClickedPiece)
 			{
 				pPreviousClickedPiece->HighlightedPieceGrab();
 			}
-
-			pClickedPiece->HighlightedPieceGrab();
+			else
+			{
+				pClickedPiece->HighlightedPieceGrab();
+			}
 			
 		}
 	}
@@ -59,6 +60,11 @@ void AMouse_PlayerController::ClickOnObject()
 	if (pClickedPiece && pClickedTile)
 	{
 		MovePiece(pClickedTile, pClickedPiece);
+		pClickedPiece = nullptr;
+		pClickedTile = nullptr;
+	}
+	else if (pClickedTile && !pClickedPiece)
+	{
 		pClickedPiece = nullptr;
 		pClickedTile = nullptr;
 	}
@@ -81,5 +87,5 @@ void AMouse_PlayerController::MovePiece(ATile* pDestinationTile, APiece* pPieceT
 		pPieceToMove->SetOccupyingTile(pDestinationTile);
 	}
 
-	pPieceToMove->SetIsHighlighted();
+	pPieceToMove->HighlightedPieceGrab();
 }
