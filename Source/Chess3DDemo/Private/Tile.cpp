@@ -14,7 +14,7 @@ ATile::ATile() : pNeighbors{ nullptr,nullptr,nullptr,nullptr }, IsHighlighted{ f
 	RootComponent = pObjectMesh;
 }
 
-void ATile::InitializePiece(EPlayerColor Player)
+void ATile::InitializePiece(EPlayerColor Player, AChessBoard* Board)
 {
 	FLinearColor PieceColor;
 	TArray<UStaticMeshComponent*> Components;
@@ -44,6 +44,8 @@ void ATile::InitializePiece(EPlayerColor Player)
 	pObjectMesh->SetMaterial(0, pDynamicMaterial);
 
 	IsHighlighted = false;
+
+	pBoard = Board;
 }
 
 bool ATile::GetTileIsOccupied()
@@ -86,17 +88,17 @@ UMaterialInstanceDynamic* ATile::GetDynamicMaterial()
 	return pDynamicMaterial;
 }
 
-ATile* ATile::GetTileInDirection(int PrimaryDirection, int SecondaryDirection)
+ATile* ATile::GetTileInDirection(ETileDirection PrimaryDirection, ETileDirection SecondaryDirection)
 {
-	if(SecondaryDirection < 0)
+	if((int)SecondaryDirection < 0)
 	{ 
-		return pNeighbors[PrimaryDirection];
+		return pNeighbors[(int)PrimaryDirection];
 	}
 	else
 	{
-		if (pNeighbors[PrimaryDirection])
+		if (pNeighbors[(int)PrimaryDirection])
 		{
-			return pNeighbors[PrimaryDirection]->GetTileInDirection(SecondaryDirection);
+			return pNeighbors[(int)PrimaryDirection]->GetTileInDirection(SecondaryDirection);
 		}
 		else
 		{
@@ -129,12 +131,12 @@ bool ATile::ChangeHighlight()
 	//If piece is not highlighted, highlight it, else remove highlight
 	if (!IsHighlighted)
 	{
-		pDynamicMaterial->SetScalarParameterValue("Intensity", 1.0f);
+		pDynamicMaterial->SetVectorParameterValue("Tint", FLinearColor::Red);
 		IsHighlighted = true;
 	}
 	else
 	{
-		pDynamicMaterial->SetScalarParameterValue("Intensity", 0.0f);
+		pDynamicMaterial->SetVectorParameterValue("Tint", PlayerColor);
 		IsHighlighted = false;
 	}
 

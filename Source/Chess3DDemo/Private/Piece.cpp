@@ -71,20 +71,35 @@ FVector2D APiece::GetBoardLocation()
 	return Vect;
 }
 
-TArray<ATile*> APiece::GetValidMovesInDirection(int PrimaryDirection, int SecondaryDirection)
+TArray<ATile*> APiece::GetValidMovesInDirection(ETileDirection PrimaryDirection, ETileDirection SecondaryDirection)
 {
 	TArray<ATile*> pValidMoves;
 	ATile* pCurrentTile;
 
 	pCurrentTile = GetOccupyingTile();
 
-	while (pCurrentTile->GetTileInDirection(PrimaryDirection, SecondaryDirection) &&
-		(!pCurrentTile->GetTileInDirection(PrimaryDirection,SecondaryDirection)->GetTileIsOccupied() || 
-		(pCurrentTile->GetTileInDirection(PrimaryDirection,SecondaryDirection) && 
-			pCurrentTile->GetTileInDirection(PrimaryDirection,SecondaryDirection)->GetOccupyingPiece()->GetPlayerColor() != GetOccupyingTile()->GetOccupyingPiece()->GetPlayerColor())))
+	while (pCurrentTile->GetTileInDirection(PrimaryDirection, SecondaryDirection))
 	{
-		pValidMoves.Add(pCurrentTile->GetTileInDirection(PrimaryDirection,SecondaryDirection));
+		if (pCurrentTile->GetTileInDirection(PrimaryDirection, SecondaryDirection)->GetTileIsOccupied() &&
+			pCurrentTile->GetTileInDirection(PrimaryDirection, SecondaryDirection)->GetOccupyingPiece()->GetPlayerColor() != this->GetPlayerColor())
+		{
+			pValidMoves.Add(pCurrentTile->GetTileInDirection(PrimaryDirection, SecondaryDirection));
+			break;
+		}
+
+		else if (pCurrentTile->GetTileInDirection(PrimaryDirection, SecondaryDirection)->GetTileIsOccupied() &&
+			pCurrentTile->GetTileInDirection(PrimaryDirection, SecondaryDirection)->GetOccupyingPiece()->GetPlayerColor() == this->GetPlayerColor())
+		{
+			break;
+		}
+
+		else if (!pCurrentTile->GetTileInDirection(PrimaryDirection, SecondaryDirection)->GetTileIsOccupied())
+		{
+			pValidMoves.Add(pCurrentTile->GetTileInDirection(PrimaryDirection, SecondaryDirection));			
+		}
+
 		pCurrentTile = pCurrentTile->GetTileInDirection(PrimaryDirection, SecondaryDirection);
+
 	}
 
 	return pValidMoves;
@@ -93,6 +108,11 @@ TArray<ATile*> APiece::GetValidMovesInDirection(int PrimaryDirection, int Second
 TArray<ATile*> APiece::GetValidMoves()
 {
 	return TArray<ATile*>();
+}
+
+ATile* APiece::GetTileFromBoard(int x, int y)
+{
+	return GetOccupyingTile()->GetBoard()->GetTile(x, y);
 }
 
 void APiece::HighlightedPieceGrab()
@@ -113,13 +133,6 @@ void APiece::HighlightedPieceGrab()
 	}
 
 	ChangeHighlight();
-
-	TArray<ATile*> Moves = GetValidMoves();
-
-	for (ATile* Tile : Moves)
-	{
-		Tile->ChangeHighlight();
-	}
 }
 
 bool APiece::ChangeHighlight()
@@ -156,10 +169,10 @@ TArray<ATile*> APieceBishop::GetValidMoves()
 {
 	TArray<ATile*> pValidMoves;
 
-	pValidMoves += GetValidMovesInDirection(TILE_NORTH, TILE_EAST);
-	pValidMoves += GetValidMovesInDirection(TILE_NORTH, TILE_WEST);
-	pValidMoves += GetValidMovesInDirection(TILE_SOUTH, TILE_EAST);
-	pValidMoves += GetValidMovesInDirection(TILE_SOUTH, TILE_WEST);
+	pValidMoves += GetValidMovesInDirection(ETileDirection::TILE_NORTH, ETileDirection::TILE_EAST);
+	pValidMoves += GetValidMovesInDirection(ETileDirection::TILE_NORTH, ETileDirection::TILE_WEST);
+	pValidMoves += GetValidMovesInDirection(ETileDirection::TILE_SOUTH, ETileDirection::TILE_EAST);
+	pValidMoves += GetValidMovesInDirection(ETileDirection::TILE_SOUTH, ETileDirection::TILE_WEST);
 
 	return pValidMoves;
 }
@@ -167,7 +180,25 @@ TArray<ATile*> APieceBishop::GetValidMoves()
 TArray<ATile*> APieceKing::GetValidMoves()
 {
 	TArray<ATile*> pValidMoves;
+	TArray<FVector2D> offsets = { FVector2D(-1, 1), FVector2D(0, 1),
+							  FVector2D(1, 1),  FVector2D(1, 0),
+							  FVector2D(1, -1), FVector2D(0, -1),
+							  FVector2D(-1, -1), FVector2D(-1, 0) };
 
+	int xCoord = GetOccupyingTile()->GetBoardCoordinate().X;
+	int yCoord = GetOccupyingTile()->GetBoardCoordinate().Y;
+
+	for (FVector2D vec : offsets)
+	{
+		if (((xCoord + vec.X > 0) && (xCoord + vec.X <= 8)) && ((yCoord + vec.Y > 0) && (yCoord + vec.Y <= 8)))
+		{
+			if (GetTileFromBoard(xCoord + vec.X, yCoord + vec.Y) && (!GetTileFromBoard(xCoord + vec.X, yCoord + vec.Y)->GetTileIsOccupied()) ||
+				(GetTileFromBoard(xCoord + vec.X, yCoord + vec.Y)->GetTileIsOccupied() && GetTileFromBoard(xCoord + vec.X, yCoord + vec.Y)->GetOccupyingPiece()->GetPlayerColor() != this->GetPlayerColor()))
+			{
+				pValidMoves.Add(GetTileFromBoard(xCoord + vec.X, yCoord + vec.Y));
+			}
+		}
+	}
 
 
 	return pValidMoves;
@@ -177,7 +208,25 @@ TArray<ATile*> APieceKing::GetValidMoves()
 TArray<ATile*> APieceKnight::GetValidMoves()
 {
 	TArray<ATile*> pValidMoves;
+	TArray<FVector2D> offsets = { FVector2D(-1, 2), FVector2D(1, 2),
+								  FVector2D(2, 1),  FVector2D(2, -1),
+								  FVector2D(1, -2), FVector2D(-1, -2),
+								  FVector2D(-2, 1), FVector2D(-2, -1) };
 
+	int xCoord = GetOccupyingTile()->GetBoardCoordinate().X;
+	int yCoord = GetOccupyingTile()->GetBoardCoordinate().Y;
+
+	for (FVector2D vec : offsets)
+	{
+		if (((xCoord + vec.X > 0) && (xCoord + vec.X <= 8)) && ((yCoord + vec.Y > 0) && (yCoord + vec.Y <= 8)))
+		{
+			if (GetTileFromBoard(xCoord + vec.X, yCoord + vec.Y) && (!GetTileFromBoard(xCoord + vec.X, yCoord + vec.Y)->GetTileIsOccupied()) || 
+				(GetTileFromBoard(xCoord + vec.X, yCoord + vec.Y)->GetTileIsOccupied() && GetTileFromBoard(xCoord + vec.X, yCoord + vec.Y)->GetOccupyingPiece()->GetPlayerColor() != this->GetPlayerColor()))
+			{
+				pValidMoves.Add(GetTileFromBoard(xCoord + vec.X, yCoord + vec.Y));
+			}
+		}
+	}
 
 
 	return pValidMoves;
@@ -187,8 +236,31 @@ TArray<ATile*> APieceKnight::GetValidMoves()
 TArray<ATile*> APiecePawn::GetValidMoves()
 {
 	TArray<ATile*> pValidMoves;
+	ATile* pMainTile = GetTileFromBoard(GetOccupyingTile()->GetBoardCoordinate().X, GetOccupyingTile()->GetBoardCoordinate().Y + (int)GetPlayerColor());
 
+	if (GetIsFirstMove() &&
+		!GetTileFromBoard(GetOccupyingTile()->GetBoardCoordinate().X, GetOccupyingTile()->GetBoardCoordinate().Y + (2 * (int)GetPlayerColor()))->GetTileIsOccupied())
+		
+	{
+		pValidMoves.Add(GetTileFromBoard(GetOccupyingTile()->GetBoardCoordinate().X, GetOccupyingTile()->GetBoardCoordinate().Y + (2 * (int)GetPlayerColor())));
+	}
 
+	if (pMainTile->GetTileInDirection(ETileDirection::TILE_WEST)->GetTileIsOccupied() &&
+		pMainTile->GetTileInDirection(ETileDirection::TILE_WEST)->GetOccupyingPiece()->GetPlayerColor() != this->GetPlayerColor())
+	{
+		pValidMoves.Add(pMainTile->GetTileInDirection(ETileDirection::TILE_WEST));
+	}
+
+	if (pMainTile->GetTileInDirection(ETileDirection::TILE_EAST)->GetTileIsOccupied() &&
+		pMainTile->GetTileInDirection(ETileDirection::TILE_EAST)->GetOccupyingPiece()->GetPlayerColor() != this->GetPlayerColor())
+	{
+		pValidMoves.Add(pMainTile->GetTileInDirection(ETileDirection::TILE_EAST));
+	}
+
+	if (!pMainTile->GetTileIsOccupied())
+	{
+		pValidMoves.Add(pMainTile);
+	}
 
 	return pValidMoves;
 
@@ -198,14 +270,14 @@ TArray<ATile*> APieceQueen::GetValidMoves()
 {
 	TArray<ATile*> pValidMoves;
 
-	pValidMoves += GetValidMovesInDirection(TILE_NORTH, TILE_EAST);
-	pValidMoves += GetValidMovesInDirection(TILE_NORTH, TILE_WEST);
-	pValidMoves += GetValidMovesInDirection(TILE_SOUTH, TILE_EAST);
-	pValidMoves += GetValidMovesInDirection(TILE_SOUTH, TILE_WEST);
-	pValidMoves += GetValidMovesInDirection(TILE_NORTH);
-	pValidMoves += GetValidMovesInDirection(TILE_SOUTH);
-	pValidMoves += GetValidMovesInDirection(TILE_EAST);
-	pValidMoves += GetValidMovesInDirection(TILE_WEST);
+	pValidMoves += GetValidMovesInDirection(ETileDirection::TILE_NORTH, ETileDirection::TILE_EAST);
+	pValidMoves += GetValidMovesInDirection(ETileDirection::TILE_NORTH, ETileDirection::TILE_WEST);
+	pValidMoves += GetValidMovesInDirection(ETileDirection::TILE_SOUTH, ETileDirection::TILE_EAST);
+	pValidMoves += GetValidMovesInDirection(ETileDirection::TILE_SOUTH, ETileDirection::TILE_WEST);
+	pValidMoves += GetValidMovesInDirection(ETileDirection::TILE_NORTH);
+	pValidMoves += GetValidMovesInDirection(ETileDirection::TILE_SOUTH);
+	pValidMoves += GetValidMovesInDirection(ETileDirection::TILE_EAST);
+	pValidMoves += GetValidMovesInDirection(ETileDirection::TILE_WEST);
 
 	return pValidMoves;
 
@@ -215,10 +287,10 @@ TArray<ATile*> APieceRook::GetValidMoves()
 {
 	TArray<ATile*> pValidMoves;
 
-	pValidMoves += GetValidMovesInDirection(TILE_NORTH);
-	pValidMoves += GetValidMovesInDirection(TILE_SOUTH);
-	pValidMoves += GetValidMovesInDirection(TILE_EAST);
-	pValidMoves += GetValidMovesInDirection(TILE_WEST);
+	pValidMoves += GetValidMovesInDirection(ETileDirection::TILE_NORTH);
+	pValidMoves += GetValidMovesInDirection(ETileDirection::TILE_SOUTH);
+	pValidMoves += GetValidMovesInDirection(ETileDirection::TILE_EAST);
+	pValidMoves += GetValidMovesInDirection(ETileDirection::TILE_WEST);
 
 	return pValidMoves;
 

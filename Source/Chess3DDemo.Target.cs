@@ -10,5 +10,8 @@ public class Chess3DDemoTarget : TargetRules
 		Type = TargetType.Game;
 
 		ExtraModuleNames.AddRange( new string[] { "Chess3DDemo" } );
-	}
+
+        DefaultBuildSettings = BuildSettingsVersion.V2;
+
+    }
 }

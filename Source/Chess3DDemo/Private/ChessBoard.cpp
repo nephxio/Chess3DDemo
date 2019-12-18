@@ -34,19 +34,19 @@ void AChessBoard::LinkTiles()
 	{
 		if (Board[i]->GetBoardCoordinate().X - 1 >= 1)
 		{
-			Board[i]->SetAdjacentTile(TILE_WEST, GetTile(Board[i]->GetBoardCoordinate().X - 1, Board[i]->GetBoardCoordinate().Y));
+			Board[i]->SetAdjacentTile(ETileDirection::TILE_WEST, GetTile(Board[i]->GetBoardCoordinate().X - 1, Board[i]->GetBoardCoordinate().Y));
 		}
 		if (Board[i]->GetBoardCoordinate().X + 1 <= 8)
 		{
-			Board[i]->SetAdjacentTile(TILE_EAST, GetTile(Board[i]->GetBoardCoordinate().X + 1, Board[i]->GetBoardCoordinate().Y));
+			Board[i]->SetAdjacentTile(ETileDirection::TILE_EAST, GetTile(Board[i]->GetBoardCoordinate().X + 1, Board[i]->GetBoardCoordinate().Y));
 		}
 		if (Board[i]->GetBoardCoordinate().Y - 1 >= 1)
 		{
-			Board[i]->SetAdjacentTile(TILE_SOUTH, GetTile(Board[i]->GetBoardCoordinate().X, Board[i]->GetBoardCoordinate().Y - 1));
+			Board[i]->SetAdjacentTile(ETileDirection::TILE_SOUTH, GetTile(Board[i]->GetBoardCoordinate().X, Board[i]->GetBoardCoordinate().Y - 1));
 		}
 		if (Board[i]->GetBoardCoordinate().Y + 1 <= 8)
 		{
-			Board[i]->SetAdjacentTile(TILE_NORTH, GetTile(Board[i]->GetBoardCoordinate().X, Board[i]->GetBoardCoordinate().Y + 1));
+			Board[i]->SetAdjacentTile(ETileDirection::TILE_NORTH, GetTile(Board[i]->GetBoardCoordinate().X, Board[i]->GetBoardCoordinate().Y + 1));
 		}
 	}
 }
@@ -76,7 +76,6 @@ APiece* AChessBoard::SpawnPiece(ATile* pTile, TSubclassOf<APiece> PieceToSpawn, 
 	}
 
 	pPiece->SetOccupyingTile(pTile);
-//	pPiece->SetBoardReference(this);
 
 	return pPiece;
 }
@@ -97,16 +96,15 @@ void AChessBoard::SpawnBoard()
 			if (!((x + y) % 2))
 			{
 				SpawnedTile = GetWorld()->SpawnActor<ATile>(TileBlueprint, FVector(y*200.0f, x*200.0f, 0.0f), FRotator(0.0f, 0.0f, 0.0f));
-				SpawnedTile->InitializePiece(EPlayerColor::PLAYER_BLACK);
+				SpawnedTile->InitializePiece(EPlayerColor::PLAYER_BLACK, this);
 			}
 			else
 			{
 				SpawnedTile = GetWorld()->SpawnActor<ATile>(TileBlueprint, FVector(y*200.0f, x*200.0f, 0.0f), FRotator(0.0f, 0.0f, 0.0f));
-				SpawnedTile->InitializePiece(EPlayerColor::PLAYER_WHITE);
+				SpawnedTile->InitializePiece(EPlayerColor::PLAYER_WHITE, this);
 			}
 			Board.Add(SpawnedTile);
 			SpawnedTile->SetBoardCoordinate(x+1, y+1);
-			UE_LOG(LogTemp, Warning, TEXT("Setting coordinate X=%d, Y=%d"), x, y);
 		}
 	}
 }

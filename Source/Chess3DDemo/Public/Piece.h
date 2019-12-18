@@ -7,17 +7,18 @@
 
 UENUM()
 enum class EPlayerColor {
-	PLAYER_NONE,
-	PLAYER_WHITE,
-	PLAYER_BLACK,
+	PLAYER_NONE = 0,
+	PLAYER_WHITE = 1,
+	PLAYER_BLACK = -1
 };
 
 UENUM()
-enum class ETileDirection : uint8 {
-	TILE_NORTH,
-	TILE_WEST,
-	TILE_SOUTH,
-	TILE_EAST,
+enum class ETileDirection {
+	TILE_NONE = -1,
+	TILE_NORTH = 0,
+	TILE_WEST = 1,
+	TILE_SOUTH = 2,
+	TILE_EAST = 3
 };
 
 UCLASS()
@@ -62,9 +63,12 @@ public:
 	FORCEINLINE bool GetIsDead() { return IsDead; }
 
 //	UFUNCTION(BlueprintCallable, Category = "Piece")
-	FORCEINLINE void SetIsDead() { IsDead = true; }
+	FORCEINLINE void SetIsDead(bool value) { IsDead = value; SetActorHiddenInGame(value); SetActorEnableCollision(!value); SetActorTickEnabled(!value); }
 
-	TArray<ATile*> GetValidMovesInDirection(int PrimaryDirection, int SecondaryDirection = -1);
+	TArray<ATile*> GetValidMovesInDirection(ETileDirection PrimaryDirection, ETileDirection SecondaryDirection = ETileDirection::TILE_NONE);
+
+	ATile* GetTileFromBoard(int x, int y);
+
 
 protected:
 
@@ -76,6 +80,8 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Material")
 	UMaterialInstanceDynamic* pDynamicMaterial;
 
+private:
+
 	//Represents player color
 	EPlayerColor PlayerColor;
 
@@ -84,8 +90,6 @@ protected:
 
 	//Link to tile currently on
 	TWeakObjectPtr<ATile> pTileCurrentlyOccupying;
-
-private:
 
 	//Stores if piece is dead
 	bool IsDead = false;
@@ -141,6 +145,13 @@ class CHESS3DDEMO_API APiecePawn : public APiece
 public:
 	//	UFUNCTION(BlueprintCallable, Category = "Movement")
 	virtual TArray<class ATile*> GetValidMoves() override;
+
+	FORCEINLINE bool GetIsFirstMove() { return IsFirstMove; }
+
+	FORCEINLINE void SetIsFirstMove(bool FirstMove) { IsFirstMove = FirstMove; }
+
+private:
+	bool IsFirstMove = true;
 };
 
 /**

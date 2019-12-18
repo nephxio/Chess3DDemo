@@ -30,10 +30,12 @@ void AMouse_PlayerController::BeginPlay()
 	}
 }
 
+
 void AMouse_PlayerController::ClickOnObject()
 {
 	FHitResult ClickResult;
 	APiece* pPreviousClickedPiece  = pClickedPiece;
+	TArray<ATile*> pValidMoves;
 
 	if (GetHitResultUnderCursorByChannel(UEngineTypes::ConvertToTraceType(ECC_Visibility), false, ClickResult))
 	{
@@ -53,15 +55,38 @@ void AMouse_PlayerController::ClickOnObject()
 
 			pClickedPiece->HighlightedPieceGrab();
 
+			pValidMoves = pClickedPiece->GetValidMoves();
+
+			for (ATile* it : pValidMoves)
+			{
+				it->ChangeHighlight();
+			}
+
 		}
 	}
 
 
 	if (pClickedPiece && pClickedTile)
 	{
-		MovePiece(pClickedTile, pClickedPiece);
-		pClickedPiece = nullptr;
-		pClickedTile = nullptr;
+		pValidMoves = pClickedPiece->GetValidMoves();
+
+		if (pValidMoves.Contains(pClickedTile))
+		{
+			for (ATile* it : pValidMoves)
+			{
+				it->ChangeHighlight();
+			}
+
+			if (pClickedTile->GetTileIsOccupied())
+			{
+				pClickedTile->GetOccupyingPiece()->SetIsDead(true);
+			}
+
+			MovePiece(pClickedTile, pClickedPiece);
+
+			pClickedPiece = nullptr;
+			pClickedTile = nullptr;
+		}
 	}
 	else if (pClickedTile && !pClickedPiece)
 	{
@@ -94,4 +119,11 @@ void AMouse_PlayerController::MovePiece(ATile* pDestinationTile, APiece* pPieceT
 	}
 
 	pPieceToMove->HighlightedPieceGrab();
+
+	APiecePawn* pCast = Cast<APiecePawn>(pPieceToMove);
+
+	if (pCast)
+	{
+		pCast->SetIsFirstMove(false);
+	}
 }

@@ -6,10 +6,6 @@
 #include "GameFramework/Actor.h"
 #include "Tile.generated.h"
 
-#define TILE_NORTH	0
-#define TILE_WEST	1
-#define TILE_SOUTH	2
-#define TILE_EAST	3
 
 UCLASS()
 class CHESS3DDEMO_API ATile : public AActor
@@ -47,19 +43,18 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Position")
 	FVector2D GetBoardCoordinate();
 
-	void InitializePiece(EPlayerColor Player);
+	void InitializePiece(EPlayerColor Player, class AChessBoard* Board);
 
 	UFUNCTION(BlueprintCallable, Category = "Object Initialization")
 	UMaterialInstanceDynamic* GetDynamicMaterial();
 
-	FORCEINLINE void SetAdjacentTile(int Direction, ATile* pTile) { pNeighbors[Direction] = pTile; }
+	FORCEINLINE void SetAdjacentTile(ETileDirection Direction, ATile* pTile) { pNeighbors[(int)Direction] = pTile; }
 
-	ATile* GetTileInDirection(int PrimaryDirection, int SecondaryDirection = -1);
+	ATile* GetTileInDirection(ETileDirection PrimaryDirection, ETileDirection SecondaryDirection = ETileDirection::TILE_NONE);
+
+	FORCEINLINE AChessBoard* GetBoard() { return pBoard; }
 
 protected:
-
-	//stores adjacent tiles in N/W/S/E directions, respectively
-	ATile* pNeighbors[4];
 
 	//Static Mesh Component
 	UPROPERTY(EditDefaultsOnly, Category = "Mesh")
@@ -68,20 +63,27 @@ protected:
 	//Material for setting Piece color
 	UMaterialInstanceDynamic* pDynamicMaterial;
 
+	UPROPERTY(EditAnywhere, Category = "Coords")
+	//represents the coordinate on the board
+	FVector2D BoardCoordinate;
+
+private:
+
+	//stores adjacent tiles in N/W/S/E directions, respectively
+	ATile* pNeighbors[4];
+
 	//Player Color: 1 is White, 2 is Black
 	FLinearColor PlayerColor;
 
 	//If the piece is highlighted
 	bool IsHighlighted;
 
-	UPROPERTY(EditAnywhere, Category = "Coords")
-	//represents the coordinate on the board
-	FVector2D BoardCoordinate;
-
-private:
 	//Reference to occupying piece
 	TWeakObjectPtr<APiece> pOccupiedBy;
 
 	//if Tile is Occupied.  0 for unoccupied, 1 for White, 2 for Black
 	EPlayerColor IsOccupied;
+
+	//Reference pointer to the board, mostly used to get Tiles via coordinates
+	AChessBoard* pBoard;
 };

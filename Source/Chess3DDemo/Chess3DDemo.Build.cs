@@ -6,7 +6,7 @@ public class Chess3DDemo : ModuleRules
 {
 	public Chess3DDemo(ReadOnlyTargetRules Target) : base(Target)
 	{
-        //PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
+        PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
         PrivatePCHHeaderFile = "Public/Chess3DDemo.h";
 
