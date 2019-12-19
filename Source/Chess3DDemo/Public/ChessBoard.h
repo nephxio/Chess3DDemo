@@ -32,12 +32,6 @@ public:
 
 	//Spawns a piece
 	APiece* SpawnPiece(ATile* pTile, TSubclassOf<APiece> PieceToSpawn, EPlayerColor Player);
-
-	UFUNCTION(BlueprintCallable, Category = "Pieces")
-	FORCEINLINE TArray<APiece*> GetBlackPieces() { return PlayerBlack; }
-
-	UFUNCTION(BlueprintCallable, Category = "Pieces")
-	FORCEINLINE TArray<APiece*> GetWhitePieces() { return PlayerWhite; }
 	
 	//Gets pointer from Board to tile at coord (x,y)
 	UFUNCTION(BlueprintCallable, Category = "Chess Tiles")
@@ -55,6 +49,8 @@ public:
 	TMap<EPieceType, TSubclassOf<APiece>> Pieces;
 
 	bool KingIsInCheck(APiece* King, TArray<APiece*> EnemyList);
+
+	FORCEINLINE TArray<APiece*> GetPlayerPieces(EPlayerColor PlayerColor) { return PlayerColor == EPlayerColor::PLAYER_BLACK ? PlayerBlack : PlayerWhite; }
 
 
 protected:

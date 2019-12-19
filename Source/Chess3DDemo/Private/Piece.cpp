@@ -256,13 +256,15 @@ TArray<ATile*> APiecePawn::GetValidMoves()
 		pValidMoves.Add(GetTileFromBoard(GetOccupyingTile()->GetBoardCoordinate().X, GetOccupyingTile()->GetBoardCoordinate().Y + (2 * (int)GetPlayerColor())));
 	}
 
-	if (pMainTile->GetTileInDirection(ETileDirection::TILE_WEST)->GetTileIsOccupied() &&
+	if (pMainTile->GetTileInDirection(ETileDirection::TILE_WEST) && 
+		pMainTile->GetTileInDirection(ETileDirection::TILE_WEST)->GetTileIsOccupied() &&
 		pMainTile->GetTileInDirection(ETileDirection::TILE_WEST)->GetOccupyingPiece()->GetPlayerColor() != this->GetPlayerColor())
 	{
 		pValidMoves.Add(pMainTile->GetTileInDirection(ETileDirection::TILE_WEST));
 	}
 
-	if (pMainTile->GetTileInDirection(ETileDirection::TILE_EAST)->GetTileIsOccupied() &&
+	if (pMainTile->GetTileInDirection(ETileDirection::TILE_EAST) &&
+		pMainTile->GetTileInDirection(ETileDirection::TILE_EAST)->GetTileIsOccupied() &&
 		pMainTile->GetTileInDirection(ETileDirection::TILE_EAST)->GetOccupyingPiece()->GetPlayerColor() != this->GetPlayerColor())
 	{
 		pValidMoves.Add(pMainTile->GetTileInDirection(ETileDirection::TILE_EAST));

@@ -16,6 +16,7 @@ void AChessGameMode::BeginPlay()
 	pBoard = GetWorld()->SpawnActor<AChessBoard>(boardBlueprint, FVector(0,0,0), FRotator(0,0,0));
 
 	GetWorld()->Exec(GetWorld(), TEXT("r.setRes 1200x900w"));
+
 }
 
 void AChessGameMode::Tick(float DeltaSeconds)
