@@ -270,7 +270,7 @@ TArray<ATile*> APiecePawn::GetValidMoves()
 		pValidMoves.Add(pMainTile->GetTileInDirection(ETileDirection::TILE_EAST));
 	}
 
-	if (!pMainTile->GetTileIsOccupied())
+	if (pMainTile && !pMainTile->GetTileIsOccupied())
 	{
 		pValidMoves.Add(pMainTile);
 	}
