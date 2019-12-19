@@ -5,7 +5,7 @@
 
 
 // Sets default values
-ATile::ATile() : pNeighbors{ nullptr,nullptr,nullptr,nullptr }, IsHighlighted{ false }, pOccupiedBy{ nullptr }, IsOccupied{ EPlayerColor::PLAYER_NONE }, pBoard{ nullptr }
+ATile::ATile() : pNeighbors{ nullptr,nullptr,nullptr,nullptr }, IsHighlighted{ false }, pOccupiedBy{ nullptr }, IsOccupied{ EPlayerColor::PLAYER_NONE }
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -44,8 +44,6 @@ void ATile::InitializePiece(EPlayerColor Player, AChessBoard* Board)
 	pObjectMesh->SetMaterial(0, pDynamicMaterial);
 
 	IsHighlighted = false;
-
-	pBoard = Board;
 }
 
 bool ATile::GetTileIsOccupied()

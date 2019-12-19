@@ -52,8 +52,6 @@ public:
 
 	ATile* GetTileInDirection(ETileDirection PrimaryDirection, ETileDirection SecondaryDirection = ETileDirection::TILE_NONE);
 
-	FORCEINLINE AChessBoard* GetBoard() { return pBoard; }
-
 protected:
 
 	//Static Mesh Component
@@ -83,7 +81,4 @@ private:
 
 	//if Tile is Occupied.  0 for unoccupied, 1 for White, 2 for Black
 	EPlayerColor IsOccupied;
-
-	//Reference pointer to the board, mostly used to get Tiles via coordinates
-	AChessBoard* pBoard;
 };
