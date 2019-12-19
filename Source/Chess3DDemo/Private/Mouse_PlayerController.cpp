@@ -55,12 +55,7 @@ void AMouse_PlayerController::ClickOnObject()
 
 			pClickedPiece->HighlightedPieceGrab();
 
-			pValidMoves = pClickedPiece->GetValidMoves();
-
-			for (ATile* it : pValidMoves)
-			{
-				it->ChangeHighlight();
-			}
+			pClickedPiece->HighlightValidMoves();
 
 		}
 	}
@@ -72,10 +67,7 @@ void AMouse_PlayerController::ClickOnObject()
 
 		if (pValidMoves.Contains(pClickedTile))
 		{
-			for (ATile* it : pValidMoves)
-			{
-				it->ChangeHighlight();
-			}
+			pClickedPiece->HighlightValidMoves();
 
 			if (pClickedTile->GetTileIsOccupied())
 			{
@@ -96,6 +88,7 @@ void AMouse_PlayerController::ClickOnObject()
 	else if (pClickedPiece && pPreviousClickedPiece && !pClickedTile)
 	{
 		pPreviousClickedPiece->HighlightedPieceGrab();
+		pPreviousClickedPiece->HighlightValidMoves();
 		pPreviousClickedPiece = pClickedPiece;
 	}
 }

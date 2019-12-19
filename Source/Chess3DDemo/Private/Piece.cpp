@@ -112,7 +112,18 @@ TArray<ATile*> APiece::GetValidMoves()
 
 ATile* APiece::GetTileFromBoard(int x, int y)
 {
-	return GetOccupyingTile()->GetBoard()->GetTile(x, y);
+	AChessGameMode* gameMode = Cast<AChessGameMode>(GetWorld()->GetAuthGameMode());
+
+	return gameMode->GetBoard()->GetTile(x, y);
+}
+
+void APiece::HighlightValidMoves()
+{
+	TArray<ATile*> validMoves = GetValidMoves();
+	for (ATile* tile : validMoves)
+	{
+		tile->ChangeHighlight();
+	}
 }
 
 void APiece::HighlightedPieceGrab()

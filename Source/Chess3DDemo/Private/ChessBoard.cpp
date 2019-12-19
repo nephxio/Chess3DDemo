@@ -11,7 +11,6 @@ AChessBoard::AChessBoard()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-
 }
 
 // Called when the game starts or when spawned
@@ -83,6 +82,33 @@ APiece* AChessBoard::SpawnPiece(ATile* pTile, TSubclassOf<APiece> PieceToSpawn, 
 ATile* AChessBoard::GetTile(int x, int y)
 {
 	return Board[8*(y-1) + (x-1)];
+}
+
+bool AChessBoard::KingIsInCheck(APiece* King, TArray<APiece*> EnemyList)
+{
+	TArray<ATile*> pEnemyMoveList;
+
+	if (King->GetPlayerColor() == EnemyList[0]->GetPlayerColor())
+	{
+		UE_LOG(LogTemp, Error, TEXT("Attempted to pass King of same color as enemy list in AChessBoard::KingIsInCheck()"));
+		return false;
+	}
+
+	for (APiece* piece : EnemyList)
+	{
+		if (!piece->GetIsDead())
+		{
+			asyncFutures.Add(std::async(std::launch::async, &APiece::GetValidMoves, piece));
+		}
+	}
+
+	for (auto &it : asyncFutures)
+	{
+		pEnemyMoveList += it.get();
+	}
+
+
+	return true;
 }
 
 void AChessBoard::SpawnBoard()

@@ -2,17 +2,12 @@
 
 #pragma once
 
+#include <future>
+#include "ChessGameMode.h"
 #include "Tile.h"
 #include "Piece.h"
 #include "GameFramework/Actor.h"
 #include "ChessBoard.generated.h"
-
-//#define PIECE_BISHOP	Pieces[0]
-//#define PIECE_KING		Pieces[1]
-//#define PIECE_KNIGHT	Pieces[2]
-//#define PIECE_PAWN		Pieces[3]
-//#define PIECE_QUEEN		Pieces[4]
-//#define PIECE_ROOK		Pieces[5]
 
 UENUM()
 enum class EPieceType {
@@ -59,6 +54,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Piece Blueprints")
 	TMap<EPieceType, TSubclassOf<APiece>> Pieces;
 
+	bool KingIsInCheck(APiece* King, TArray<APiece*> EnemyList);
+
 
 protected:
 	// Called when the game starts or when spawned
@@ -82,5 +79,7 @@ private:
 
 	//Sets up Black and White players
 	void SpawnInitialPlayerPieces();
+
+	TArray<std::future<TArray<ATile*>>> asyncFutures;
 		
 };

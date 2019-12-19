@@ -22,4 +22,15 @@ public:
 
 	virtual void BeginPlay() override;
 
+	void SetBoard(class AChessBoard* Board) { pBoard = Board; }
+
+	AChessBoard* GetBoard() { return pBoard; }
+
+protected:
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<AChessBoard> boardBlueprint;
+
+	AChessBoard* pBoard;
+
 };

@@ -5,7 +5,7 @@
 
 
 // Sets default values
-ATile::ATile() : pNeighbors{ nullptr,nullptr,nullptr,nullptr }, IsHighlighted{ false }, pOccupiedBy{ nullptr }, IsOccupied{ EPlayerColor::PLAYER_NONE }
+ATile::ATile() : pNeighbors{ nullptr,nullptr,nullptr,nullptr }, IsHighlighted{ false }, pOccupiedBy{ nullptr }, IsOccupied{ EPlayerColor::PLAYER_NONE }, pBoard{ nullptr }
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;

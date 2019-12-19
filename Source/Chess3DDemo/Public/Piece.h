@@ -69,6 +69,8 @@ public:
 
 	ATile* GetTileFromBoard(int x, int y);
 
+	void HighlightValidMoves();
+
 
 protected:
 
