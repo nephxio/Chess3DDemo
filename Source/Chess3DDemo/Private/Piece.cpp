@@ -247,7 +247,16 @@ TArray<ATile*> APieceKnight::GetValidMoves()
 TArray<ATile*> APiecePawn::GetValidMoves()
 {
 	TArray<ATile*> pValidMoves;
-	ATile* pMainTile = GetTileFromBoard(GetOccupyingTile()->GetBoardCoordinate().X, GetOccupyingTile()->GetBoardCoordinate().Y + (int)GetPlayerColor());
+	ATile* pMainTile = nullptr;
+	
+	if ((GetOccupyingTile()->GetBoardCoordinate().Y + (int)GetPlayerColor() > 0) && (GetOccupyingTile()->GetBoardCoordinate().Y + (int)GetPlayerColor() <= 8))
+	{
+		pMainTile = GetTileFromBoard(GetOccupyingTile()->GetBoardCoordinate().X, GetOccupyingTile()->GetBoardCoordinate().Y + (int)GetPlayerColor());
+	}
+	else
+	{
+		return pValidMoves;
+	}
 
 	if (GetIsFirstMove() &&
 		!GetTileFromBoard(GetOccupyingTile()->GetBoardCoordinate().X, GetOccupyingTile()->GetBoardCoordinate().Y + (2 * (int)GetPlayerColor()))->GetTileIsOccupied())
@@ -276,7 +285,6 @@ TArray<ATile*> APiecePawn::GetValidMoves()
 	}
 
 	return pValidMoves;
-
 }
 
 TArray<ATile*> APieceQueen::GetValidMoves()

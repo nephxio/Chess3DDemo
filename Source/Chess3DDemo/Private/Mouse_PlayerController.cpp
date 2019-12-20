@@ -91,6 +91,10 @@ void AMouse_PlayerController::ClickOnObject()
 		pPreviousClickedPiece->HighlightValidMoves();
 		pPreviousClickedPiece = pClickedPiece;
 	}
+
+	AChessGameMode* pGameMode = Cast<AChessGameMode>(GetWorld()->GetAuthGameMode());
+	pGameMode->IsBlackKingInCheck();
+	pGameMode->IsWhiteKingInCheck();
 }
 
 void AMouse_PlayerController::MovePiece(ATile* pDestinationTile, APiece* pPieceToMove)

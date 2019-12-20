@@ -5,6 +5,7 @@
 #include "GameFramework/PlayerController.h"
 #include "Tile.h"
 #include "Piece.h"
+#include "ChessGameMode.h"
 #include "Mouse_PlayerController.generated.h"
 
 /**

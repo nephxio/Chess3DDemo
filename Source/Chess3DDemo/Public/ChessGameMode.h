@@ -13,7 +13,7 @@ UCLASS()
 class CHESS3DDEMO_API AChessGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
-	
+
 public:
 
 	AChessGameMode();
@@ -22,9 +22,15 @@ public:
 
 	virtual void BeginPlay() override;
 
-	void SetBoard(class AChessBoard* Board) { pBoard = Board; }
+	void GetKingPointers();
 
-	AChessBoard* GetBoard() { return pBoard; }
+	FORCEINLINE void SetBoard(class AChessBoard* Board) { pBoard = Board; }
+
+	FORCEINLINE AChessBoard* GetBoard() { return pBoard; }
+
+	bool IsWhiteKingInCheck();
+
+	bool IsBlackKingInCheck();
 
 protected:
 
@@ -32,5 +38,9 @@ protected:
 	TSubclassOf<AChessBoard> boardBlueprint;
 
 	AChessBoard* pBoard;
+
+	class APieceKing* pWhiteKing;
+
+	APieceKing* pBlackKing;
 
 };

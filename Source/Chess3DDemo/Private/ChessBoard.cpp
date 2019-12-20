@@ -3,6 +3,7 @@
 #include "ChessBoard.h"
 #include "Chess3DDemo.h"
 #include "Piece.h"
+#include <sstream>
 
 
 // Sets default values
@@ -98,7 +99,7 @@ bool AChessBoard::KingIsInCheck(APiece* King, TArray<APiece*> EnemyList)
 	{
 		if (!piece->GetIsDead())
 		{
-			asyncFutures.Add(std::async(std::launch::async, &APiece::GetValidMoves, piece));
+			asyncFutures.Add(std::async(std::launch::async, &APiece::GetValidMoves, piece));		
 		}
 	}
 
@@ -107,8 +108,15 @@ bool AChessBoard::KingIsInCheck(APiece* King, TArray<APiece*> EnemyList)
 		pEnemyMoveList += it.get();
 	}
 
+	if (pEnemyMoveList.Contains(King->GetOccupyingTile()))
+	{
+		UE_LOG(LogTemp, Error, TEXT("%s is in Check."), *King->GetName());
+		asyncFutures.Empty();
+		return true;
+	}
 
-	return true;
+	asyncFutures.Empty();
+	return false;
 }
 
 void AChessBoard::SpawnBoard()
