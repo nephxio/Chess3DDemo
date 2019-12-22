@@ -6,6 +6,7 @@
 #include "Tile.h"
 #include "Piece.h"
 #include "ChessGameMode.h"
+#include "ChessBoard.h"
 #include "Mouse_PlayerController.generated.h"
 
 /**
@@ -21,8 +22,6 @@ public:
 	AMouse_PlayerController();
 
 	void ClickOnObject();
-
-	void MovePiece(ATile* pDestinationTile, APiece* pPieceToMove);
 
 protected:
 	// Called when the game starts or when spawned

@@ -34,7 +34,15 @@ void AMouse_PlayerController::ClickOnObject()
 {
 	FHitResult ClickResult;
 	APiece* pPreviouslyClickedPiece = pClickedPiece;
+	AChessGameMode* pGameMode = Cast<AChessGameMode>(GetWorld()->GetAuthGameMode());
 	TArray<ATile*> pValidMoves;
+
+	if (!pGameMode)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Failed to cast pGameMode in AMousePlayerController::ClickOnObject"));
+		return;
+	}
+
 
 	if (GetHitResultUnderCursorByChannel(UEngineTypes::ConvertToTraceType(ECC_Visibility), false, ClickResult))
 	{
@@ -102,42 +110,13 @@ void AMouse_PlayerController::ClickOnObject()
 				pClickedTile->GetOccupyingPiece()->SetIsDead(true);
 			}
 
-			MovePiece(pClickedTile, pClickedPiece);
+			pGameMode->GetBoard()->MovePiece(pClickedTile, pClickedPiece);
 
 			pClickedPiece = nullptr;
 			pClickedTile = nullptr;
 		}
 	}
 
-	AChessGameMode* pGameMode = Cast<AChessGameMode>(GetWorld()->GetAuthGameMode());
 	pGameMode->IsBlackKingInCheck();
 	pGameMode->IsWhiteKingInCheck();
-}
-
-void AMouse_PlayerController::MovePiece(ATile* pDestinationTile, APiece* pPieceToMove)
-{
-	FTransform SocketLocation, MoveLocation;
-	FVector Components = pDestinationTile->GetMesh()->GetSocketLocation(FName("Piece"));
-
-	if (pPieceToMove->GetOccupyingTile())
-	{
-		pPieceToMove->GetOccupyingTile()->SetTileIsOccupied(EPlayerColor::PLAYER_NONE, nullptr);
-	}
-
-	pPieceToMove->SetActorLocation(Components);
-
-	if (pDestinationTile)
-	{
-		pPieceToMove->SetOccupyingTile(pDestinationTile);
-		pDestinationTile->SetTileIsOccupied(pPieceToMove->GetPlayerColor(), pPieceToMove);
-	}
-
-	pPieceToMove->HighlightedPieceGrab();
-
-	APiecePawn* pCast = Cast<APiecePawn>(pPieceToMove);
-
-	if (pCast)
-	{
-		pCast->SetIsFirstMove(false);
-	}
 }

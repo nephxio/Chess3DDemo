@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "Piece.h"
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
 #include "ChessGameMode.generated.h"
@@ -32,6 +33,8 @@ public:
 
 	bool IsBlackKingInCheck();
 
+	void AdvanceTurn();
+
 protected:
 
 	UPROPERTY(EditDefaultsOnly)
@@ -39,8 +42,10 @@ protected:
 
 	AChessBoard* pBoard;
 
-	class APieceKing* pWhiteKing;
+	APieceKing* pWhiteKing;
 
 	APieceKing* pBlackKing;
+
+	EPlayerColor PlayerTurn;
 
 };

@@ -128,6 +128,34 @@ bool AChessBoard::KingIsInCheck(APiece* King, TArray<APiece*> EnemyList)
 	return false;
 }
 
+void AChessBoard::MovePiece(ATile* pDestinationTile, APiece* pPieceToMove)
+{
+	FTransform SocketLocation, MoveLocation;
+	FVector Components = pDestinationTile->GetMesh()->GetSocketLocation(FName("Piece"));
+
+	if (pPieceToMove->GetOccupyingTile())
+	{
+		pPieceToMove->GetOccupyingTile()->SetTileIsOccupied(EPlayerColor::PLAYER_NONE, nullptr);
+	}
+
+	pPieceToMove->SetActorLocation(Components);
+
+	if (pDestinationTile)
+	{
+		pPieceToMove->SetOccupyingTile(pDestinationTile);
+		pDestinationTile->SetTileIsOccupied(pPieceToMove->GetPlayerColor(), pPieceToMove);
+	}
+
+	pPieceToMove->HighlightedPieceGrab();
+
+	APiecePawn* pCast = Cast<APiecePawn>(pPieceToMove);
+
+	if (pCast)
+	{
+		pCast->SetIsFirstMove(false);
+	}
+}
+
 void AChessBoard::SpawnBoard()
 {
 	ATile* SpawnedTile = nullptr;
