@@ -30,11 +30,10 @@ void AMouse_PlayerController::BeginPlay()
 	}
 }
 
-
 void AMouse_PlayerController::ClickOnObject()
 {
 	FHitResult ClickResult;
-	APiece* pPreviousClickedPiece  = pClickedPiece;
+	APiece* pPreviouslyClickedPiece = pClickedPiece;
 	TArray<ATile*> pValidMoves;
 
 	if (GetHitResultUnderCursorByChannel(UEngineTypes::ConvertToTraceType(ECC_Visibility), false, ClickResult))
@@ -48,20 +47,49 @@ void AMouse_PlayerController::ClickOnObject()
 		}
 		else if (ClickResult.GetActor()->IsA(APiece::StaticClass()))
 		{
+
 			if (Cast<APiece>(ClickResult.GetActor()))
 			{
-				pClickedPiece = Cast<APiece>(ClickResult.GetActor());
+				if (!pClickedPiece)
+				{
+					pClickedPiece = Cast<APiece>(ClickResult.GetActor());
+
+					pClickedPiece->HighlightedPieceGrab();
+					pClickedPiece->HighlightValidMoves();
+				}
+				else if (pClickedPiece == Cast<APiece>(ClickResult.GetActor()))
+				{
+					pClickedPiece->HighlightedPieceGrab();
+					pClickedPiece->HighlightValidMoves();
+					pClickedPiece = nullptr;
+				}
+				else
+				{
+					if (pClickedPiece->GetPlayerColor() != Cast<APiece>(ClickResult.GetActor())->GetPlayerColor())
+					{
+						pClickedTile = Cast<APiece>(ClickResult.GetActor())->GetOccupyingTile();
+					}
+					else
+					{
+						pClickedPiece->HighlightedPieceGrab();
+						pClickedPiece->HighlightValidMoves();
+						pClickedPiece = Cast<APiece>(ClickResult.GetActor());
+						pClickedPiece->HighlightedPieceGrab();
+						pClickedPiece->HighlightValidMoves();
+					}
+				}
+
 			}
-
-			pClickedPiece->HighlightedPieceGrab();
-
-			pClickedPiece->HighlightValidMoves();
-
 		}
 	}
+	
+	if (pClickedTile && !pPreviouslyClickedPiece)
+	{
+		pPreviouslyClickedPiece = nullptr;
+		pClickedTile = nullptr;
+	}
 
-
-	if (pClickedPiece && pClickedTile)
+	else if (pClickedPiece && (pPreviouslyClickedPiece == pClickedPiece) && pClickedTile)
 	{
 		pValidMoves = pClickedPiece->GetValidMoves();
 
@@ -79,17 +107,6 @@ void AMouse_PlayerController::ClickOnObject()
 			pClickedPiece = nullptr;
 			pClickedTile = nullptr;
 		}
-	}
-	else if (pClickedTile && !pClickedPiece)
-	{
-		pClickedPiece = nullptr;
-		pClickedTile = nullptr;
-	}
-	else if (pClickedPiece && pPreviousClickedPiece && !pClickedTile)
-	{
-		pPreviousClickedPiece->HighlightedPieceGrab();
-		pPreviousClickedPiece->HighlightValidMoves();
-		pPreviousClickedPiece = pClickedPiece;
 	}
 
 	AChessGameMode* pGameMode = Cast<AChessGameMode>(GetWorld()->GetAuthGameMode());

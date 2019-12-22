@@ -50,6 +50,8 @@ public:
 
 	bool KingIsInCheck(APiece* King, TArray<APiece*> EnemyList);
 
+	TArray<ATile*> GetAllPlayerMoves(TArray<APiece*> EnemyList);
+
 	FORCEINLINE TArray<APiece*> GetPlayerPieces(EPlayerColor PlayerColor) { return PlayerColor == EPlayerColor::PLAYER_BLACK ? PlayerBlack : PlayerWhite; }
 
 

@@ -85,6 +85,26 @@ ATile* AChessBoard::GetTile(int x, int y)
 	return Board[8*(y-1) + (x-1)];
 }
 
+TArray<ATile*> AChessBoard::GetAllPlayerMoves(TArray<APiece*> EnemyList)
+{
+	TArray<ATile*> pEnemyMoveList;
+
+	for (APiece* piece : EnemyList)
+	{
+		if (!piece->GetIsDead())
+		{
+			asyncFutures.Add(std::async(std::launch::async, &APiece::GetValidMoves, piece));
+		}
+	}
+
+	for (auto &it : asyncFutures)
+	{
+		pEnemyMoveList += it.get();
+	}
+
+	return pEnemyMoveList;
+}
+
 bool AChessBoard::KingIsInCheck(APiece* King, TArray<APiece*> EnemyList)
 {
 	TArray<ATile*> pEnemyMoveList;
@@ -95,27 +115,16 @@ bool AChessBoard::KingIsInCheck(APiece* King, TArray<APiece*> EnemyList)
 		return false;
 	}
 
-	for (APiece* piece : EnemyList)
-	{
-		if (!piece->GetIsDead())
-		{
-			asyncFutures.Add(std::async(std::launch::async, &APiece::GetValidMoves, piece));		
-		}
-	}
-
-	for (auto &it : asyncFutures)
-	{
-		pEnemyMoveList += it.get();
-	}
+	pEnemyMoveList = GetAllPlayerMoves(EnemyList);
 
 	if (pEnemyMoveList.Contains(King->GetOccupyingTile()))
 	{
 		UE_LOG(LogTemp, Error, TEXT("%s is in Check."), *King->GetName());
-		asyncFutures.Empty();
+		asyncFutures.Empty(); //need to do this so we're not left with null references in the array in the next use
 		return true;
 	}
 
-	asyncFutures.Empty();
+	asyncFutures.Empty(); //need to do this so we're not left with null references in the array in the next use
 	return false;
 }
 
