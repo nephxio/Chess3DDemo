@@ -20,7 +20,6 @@ enum class EPieceType {
 	PIECE_ROOK		UMETA(DisplayName = "Rook"),
 };
 
-
 UCLASS()
 class CHESS3DDEMO_API AChessBoard : public AActor
 {
@@ -55,7 +54,6 @@ public:
 	TArray<ATile*> GetAllPlayerMoves(TArray<APiece*> EnemyList);
 
 	FORCEINLINE TArray<APiece*> GetPlayerPieces(EPlayerColor PlayerColor) { return PlayerColor == EPlayerColor::PLAYER_BLACK ? PlayerBlack : PlayerWhite; }
-
 
 protected:
 	// Called when the game starts or when spawned

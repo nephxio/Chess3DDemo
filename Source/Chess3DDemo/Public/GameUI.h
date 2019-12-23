@@ -3,13 +3,20 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Piece.h"
+#include "Blueprint/UserWidget.h"
+#include "GameUI.generated.h"
 
 /**
  * 
  */
-class CHESS3DDEMO_API GameUI
+UCLASS()
+class CHESS3DDEMO_API UGameUI : public UUserWidget
 {
+	GENERATED_BODY()
+
 public:
-	GameUI();
-	~GameUI();
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnPieceCaptured(int PlayerColor, int index);
+	
 };
