@@ -16,7 +16,5 @@ class CHESS3DDEMO_API UGameUI : public UUserWidget
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintImplementableEvent)
-	void OnPieceCaptured(int PlayerColor, int index);
 	
 };

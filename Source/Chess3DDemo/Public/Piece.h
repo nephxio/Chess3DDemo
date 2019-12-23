@@ -21,6 +21,8 @@ enum class ETileDirection {
 	TILE_EAST = 3
 };
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPieceIsCapturedSignature, int, index);
+
 UCLASS()
 class CHESS3DDEMO_API APiece : public AActor
 {
@@ -70,6 +72,9 @@ public:
 	ATile* GetTileFromBoard(int x, int y);
 
 	void HighlightValidMoves();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnPieceIsCaptured(int index);
 
 
 protected:

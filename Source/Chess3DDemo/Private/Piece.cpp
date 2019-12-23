@@ -239,9 +239,7 @@ TArray<ATile*> APieceKnight::GetValidMoves()
 		}
 	}
 
-
 	return pValidMoves;
-
 }
 
 TArray<ATile*> APiecePawn::GetValidMoves()
@@ -301,7 +299,6 @@ TArray<ATile*> APieceQueen::GetValidMoves()
 	pValidMoves += GetValidMovesInDirection(ETileDirection::TILE_WEST);
 
 	return pValidMoves;
-
 }
 
 TArray<ATile*> APieceRook::GetValidMoves()
@@ -314,5 +311,9 @@ TArray<ATile*> APieceRook::GetValidMoves()
 	pValidMoves += GetValidMovesInDirection(ETileDirection::TILE_WEST);
 
 	return pValidMoves;
+}
+
+void APiece::OnPieceIsCaptured(int index)
+{
 
 }
