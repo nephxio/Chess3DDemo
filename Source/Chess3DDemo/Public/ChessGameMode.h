@@ -7,9 +7,9 @@
 #include "GameFramework/GameModeBase.h"
 #include "ChessGameMode.generated.h"
 
-/**
- * 
- */
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FPieceIsCapturedDelegate, APiece*, DeadPiece, int, Index, int, PlayerColor);
+
 UCLASS()
 class CHESS3DDEMO_API AChessGameMode : public AGameModeBase
 {
@@ -35,6 +35,10 @@ public:
 
 	void AdvanceTurn();
 
+public:
+	UPROPERTY(BlueprintAssignable)
+	FPieceIsCapturedDelegate OnPieceIsCaptured;
+
 protected:
 
 	UPROPERTY(EditDefaultsOnly)
@@ -47,5 +51,4 @@ protected:
 	APieceKing* pBlackKing;
 
 	EPlayerColor PlayerTurn;
-
 };

@@ -21,8 +21,6 @@ enum class ETileDirection {
 	TILE_EAST = 3
 };
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPieceIsCapturedSignature, int, index);
-
 UCLASS()
 class CHESS3DDEMO_API APiece : public AActor
 {
@@ -65,16 +63,13 @@ public:
 	FORCEINLINE bool GetIsDead() { return IsDead; }
 
 //	UFUNCTION(BlueprintCallable, Category = "Piece")
-	FORCEINLINE void SetIsDead(bool value) { IsDead = value; SetActorHiddenInGame(value); SetActorEnableCollision(!value); SetActorTickEnabled(!value); }
+	void SetIsDead(bool value);
 
 	TArray<ATile*> GetValidMovesInDirection(ETileDirection PrimaryDirection, ETileDirection SecondaryDirection = ETileDirection::TILE_NONE);
 
 	ATile* GetTileFromBoard(int x, int y);
 
 	void HighlightValidMoves();
-
-	UFUNCTION(BlueprintImplementableEvent)
-	void OnPieceIsCaptured(int index);
 
 
 protected:

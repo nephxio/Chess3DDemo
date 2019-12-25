@@ -105,11 +105,6 @@ void AMouse_PlayerController::ClickOnObject()
 		{
 			pClickedPiece->HighlightValidMoves();
 
-			if (pClickedTile->GetTileIsOccupied())
-			{
-				pClickedTile->GetOccupyingPiece()->SetIsDead(true);
-			}
-
 			pGameMode->GetBoard()->MovePiece(pClickedTile, pClickedPiece);
 
 			pClickedPiece = nullptr;

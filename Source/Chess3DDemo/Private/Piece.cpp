@@ -176,6 +176,15 @@ EPlayerColor APiece::GetPlayerColor()
 	return PlayerColor;
 }
 
+void APiece::SetIsDead(bool value)
+{
+	IsDead = value; 
+	SetActorHiddenInGame(value); 
+	SetActorEnableCollision(!value); 
+	SetActorTickEnabled(!value);
+
+}
+
 TArray<ATile*> APieceBishop::GetValidMoves()
 {
 	TArray<ATile*> pValidMoves;
@@ -311,9 +320,4 @@ TArray<ATile*> APieceRook::GetValidMoves()
 	pValidMoves += GetValidMovesInDirection(ETileDirection::TILE_WEST);
 
 	return pValidMoves;
-}
-
-void APiece::OnPieceIsCaptured(int index)
-{
-
 }

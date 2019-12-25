@@ -133,6 +133,27 @@ void AChessBoard::MovePiece(ATile* pDestinationTile, APiece* pPieceToMove)
 	FTransform SocketLocation, MoveLocation;
 	FVector Components = pDestinationTile->GetMesh()->GetSocketLocation(FName("Piece"));
 
+	if (pDestinationTile->GetTileIsOccupied())
+	{
+		AChessGameMode* pGameMode = Cast<AChessGameMode>(GetWorld()->GetAuthGameMode());
+
+		if (!pGameMode)
+		{
+			UE_LOG(LogTemp, Error, TEXT("Could not cast to game Mode in AChessBoard::MovePiece"));
+			return;
+		}
+
+		pDestinationTile->GetOccupyingPiece()->SetIsDead(true);
+		if (pDestinationTile->GetOccupyingPiece()->GetPlayerColor() == EPlayerColor::PLAYER_BLACK)
+		{
+			pGameMode->OnPieceIsCaptured.Broadcast(pDestinationTile->GetOccupyingPiece(), PlayerBlack.Find(pDestinationTile->GetOccupyingPiece()), (int)EPlayerColor::PLAYER_BLACK);
+		}
+		else if (pDestinationTile->GetOccupyingPiece()->GetPlayerColor() == EPlayerColor::PLAYER_WHITE)
+		{
+			pGameMode->OnPieceIsCaptured.Broadcast(pDestinationTile->GetOccupyingPiece(), PlayerWhite.Find(pDestinationTile->GetOccupyingPiece()), (int)EPlayerColor::PLAYER_WHITE);
+		}
+	}
+
 	if (pPieceToMove->GetOccupyingTile())
 	{
 		pPieceToMove->GetOccupyingTile()->SetTileIsOccupied(EPlayerColor::PLAYER_NONE, nullptr);
@@ -154,6 +175,8 @@ void AChessBoard::MovePiece(ATile* pDestinationTile, APiece* pPieceToMove)
 	{
 		pCast->SetIsFirstMove(false);
 	}
+
+
 }
 
 void AChessBoard::SpawnBoard()
