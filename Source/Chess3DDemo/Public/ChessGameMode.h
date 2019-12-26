@@ -27,11 +27,13 @@ public:
 
 	FORCEINLINE void SetBoard(class AChessBoard* Board) { pBoard = Board; }
 
-	FORCEINLINE AChessBoard* GetBoard() { return pBoard; }
+	FORCEINLINE AChessBoard* GetBoard() const { return pBoard; }
 
 	bool IsWhiteKingInCheck();
 
 	bool IsBlackKingInCheck();
+
+	FORCEINLINE EPlayerColor GetPlayerTurn() const { return PlayerTurn; }
 
 	void AdvanceTurn();
 

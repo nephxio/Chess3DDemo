@@ -55,7 +55,6 @@ void AMouse_PlayerController::ClickOnObject()
 		}
 		else if (ClickResult.GetActor()->IsA(APiece::StaticClass()))
 		{
-
 			if (Cast<APiece>(ClickResult.GetActor()))
 			{
 				if (!pClickedPiece)
@@ -86,7 +85,6 @@ void AMouse_PlayerController::ClickOnObject()
 						pClickedPiece->HighlightValidMoves();
 					}
 				}
-
 			}
 		}
 	}
@@ -111,7 +109,6 @@ void AMouse_PlayerController::ClickOnObject()
 			pClickedTile = nullptr;
 		}
 	}
-
-	pGameMode->IsBlackKingInCheck();
-	pGameMode->IsWhiteKingInCheck();
+	
+	pGameMode->AdvanceTurn();
 }
