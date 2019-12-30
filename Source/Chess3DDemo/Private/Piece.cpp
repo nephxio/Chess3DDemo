@@ -55,23 +55,22 @@ void APiece::SetOccupyingTile(ATile* pTile)
 	pTileCurrentlyOccupying = TWeakObjectPtr<ATile>(pTile);
 }
 
-ATile* APiece::GetOccupyingTile()
+ATile* APiece::GetOccupyingTile() const
 {
 	return pTileCurrentlyOccupying.Get();
 }
 
-UMaterialInstanceDynamic* APiece::GetDynamicMaterial()
+UMaterialInstanceDynamic* APiece::GetDynamicMaterial() const
 {
 	return pDynamicMaterial;
 }
 
-FVector2D APiece::GetBoardLocation()
+FVector2D APiece::GetBoardLocation() const
 {
-	FVector2D Vect = pTileCurrentlyOccupying->GetBoardCoordinate();
-	return Vect;
+	return pTileCurrentlyOccupying->GetBoardCoordinate();
 }
 
-TArray<ATile*> APiece::GetValidMovesInDirection(ETileDirection PrimaryDirection, ETileDirection SecondaryDirection)
+TArray<ATile*> APiece::GetValidMovesInDirection(ETileDirection PrimaryDirection, ETileDirection SecondaryDirection) const 
 {
 	TArray<ATile*> pValidMoves;
 	ATile* pCurrentTile;
@@ -166,12 +165,12 @@ bool APiece::ChangeHighlight()
 }
 
 //return if the piece is highlighted (exposed for Blueprint use)
-bool APiece::IsHighlighted()
+bool APiece::IsHighlighted() const
 {
 	return IsPieceHighlighted;
 }
 
-EPlayerColor APiece::GetPlayerColor()
+EPlayerColor APiece::GetPlayerColor() const
 {
 	return PlayerColor;
 }
@@ -222,7 +221,6 @@ TArray<ATile*> APieceKing::GetValidMoves()
 
 
 	return pValidMoves;
-
 }
 
 TArray<ATile*> APieceKnight::GetValidMoves()

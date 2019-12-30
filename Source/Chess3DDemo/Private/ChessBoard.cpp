@@ -56,24 +56,18 @@ APiece* AChessBoard::SpawnPiece(ATile* pTile, TSubclassOf<APiece> PieceToSpawn, 
 	APiece* pPiece;
 	TArray<UStaticMeshComponent*> Components;
 	pTile->GetComponents<UStaticMeshComponent>(Components);
-	
+	AChessGameMode* pGameMode = Cast<AChessGameMode>(GetWorld()->GetAuthGameMode());
+
+	if (!pGameMode)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Could not cast to GameMode in AChessBoard::SpawnPiee."));
+		return nullptr;
+	}
 	pPiece = GetWorld()->SpawnActor<APiece>(PieceToSpawn, Components[0]->GetSocketLocation("Piece"), Components[0]->GetSocketRotation("Piece"));
 
 	pPiece->InitializePiece(Player);
 
-	if (Player == EPlayerColor::PLAYER_BLACK)
-	{
-		PlayerBlack.Add(pPiece);
-	}
-	else if (Player == EPlayerColor::PLAYER_WHITE)
-	{
-		PlayerWhite.Add(pPiece);
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Probably forgot to set a Player Color"));
-		return nullptr;
-	}
+	pGameMode->GetPlayer(Player)->AddPieceToList(pPiece);
 
 	pPiece->SetOccupyingTile(pTile);
 
@@ -103,6 +97,19 @@ TArray<ATile*> AChessBoard::GetAllPlayerMoves(TArray<APiece*> EnemyList)
 	}
 
 	return pEnemyMoveList;
+}
+
+TArray<APiece*> AChessBoard::GetPlayerPieces(EPlayerColor PlayerColor) const
+{
+	AChessGameMode* pGameMode = Cast<AChessGameMode>(GetWorld()->GetAuthGameMode());
+	if (!pGameMode)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Could not cast to GameMode in AChessBoard::GetPlayerPieces."));
+		return TArray<APiece*>();
+	}
+
+	return pGameMode->GetPlayer(PlayerColor)->GetPieceList();
+
 }
 
 bool AChessBoard::KingIsInCheck(APiece* King, TArray<APiece*> EnemyList)
@@ -146,11 +153,11 @@ void AChessBoard::MovePiece(ATile* pDestinationTile, APiece* pPieceToMove)
 		pDestinationTile->GetOccupyingPiece()->SetIsDead(true);
 		if (pDestinationTile->GetOccupyingPiece()->GetPlayerColor() == EPlayerColor::PLAYER_BLACK)
 		{
-			pGameMode->OnPieceIsCaptured.Broadcast(pDestinationTile->GetOccupyingPiece(), PlayerBlack.Find(pDestinationTile->GetOccupyingPiece()), (int)EPlayerColor::PLAYER_BLACK);
+			pGameMode->OnPieceIsCaptured.Broadcast(pDestinationTile->GetOccupyingPiece(), pGameMode->GetPlayer(EPlayerColor::PLAYER_BLACK)->FindPiece(pDestinationTile->GetOccupyingPiece()), (int)EPlayerColor::PLAYER_BLACK);
 		}
 		else if (pDestinationTile->GetOccupyingPiece()->GetPlayerColor() == EPlayerColor::PLAYER_WHITE)
 		{
-			pGameMode->OnPieceIsCaptured.Broadcast(pDestinationTile->GetOccupyingPiece(), PlayerWhite.Find(pDestinationTile->GetOccupyingPiece()), (int)EPlayerColor::PLAYER_WHITE);
+			pGameMode->OnPieceIsCaptured.Broadcast(pDestinationTile->GetOccupyingPiece(), pGameMode->GetPlayer(EPlayerColor::PLAYER_WHITE)->FindPiece(pDestinationTile->GetOccupyingPiece()), (int)EPlayerColor::PLAYER_WHITE);
 		}
 	}
 

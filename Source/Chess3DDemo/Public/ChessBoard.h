@@ -6,6 +6,7 @@
 #include "ChessGameMode.h"
 #include "Tile.h"
 #include "Piece.h"
+#include "ChessPlayerPawn.h"
 #include "GameFramework/Actor.h"
 #include "ChessBoard.generated.h"
 
@@ -39,6 +40,19 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Board")
 	FORCEINLINE TArray<ATile*> GetBoard() { return Board; }
 
+	bool KingIsInCheck(APiece* King, TArray<APiece*> EnemyList);
+
+	void MovePiece(ATile* pDestinationTile, APiece* pPieceToMove);
+
+	TArray<ATile*> GetAllPlayerMoves(TArray<APiece*> EnemyList);
+
+	TArray<APiece*> GetPlayerPieces(EPlayerColor PlayerColor) const;
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+public:
 	//Blueprints for the Tiles to Spawn
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tile Blueprint")
 	TSubclassOf<ATile> TileBlueprint;
@@ -47,27 +61,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Piece Blueprints")
 	TMap<EPieceType, TSubclassOf<APiece>> Pieces;
 
-	bool KingIsInCheck(APiece* King, TArray<APiece*> EnemyList);
-
-	void MovePiece(ATile* pDestinationTile, APiece* pPieceToMove);
-
-	TArray<ATile*> GetAllPlayerMoves(TArray<APiece*> EnemyList);
-
-	FORCEINLINE TArray<APiece*> GetPlayerPieces(EPlayerColor PlayerColor) { return PlayerColor == EPlayerColor::PLAYER_BLACK ? PlayerBlack : PlayerWhite; }
-
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
 
 private:	
 	//Holds all the tiles of the board for reference later
 	TArray<ATile*> Board;
-
-	//Holds all the Black pieces in play
-	TArray<APiece*> PlayerBlack;
-
-	//Holds all the White Pieces in play
-	TArray<APiece*> PlayerWhite;
 
 	//Links adjacent tiles together
 	void LinkTiles();

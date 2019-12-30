@@ -26,13 +26,13 @@ public:
 	bool ChangeHighlight();
 
 	UFUNCTION(BlueprintCallable, Category = "Tiles")
-	bool GetTileIsOccupied();
+	bool GetTileIsOccupied() const;
 
 	UFUNCTION(BlueprintCallable, Category = "Tiles")
 	APiece* GetOccupyingPiece();
 
 	UFUNCTION(BlueprintCallable, Category = "Mesh")
-	UStaticMeshComponent* GetMesh() { return pObjectMesh; }
+	UStaticMeshComponent* GetMesh() const { return pObjectMesh; }
 
 	//Sets tile occupation status.
 	void SetTileIsOccupied(EPlayerColor Status, APiece* pOccupyingPiece);
@@ -41,16 +41,16 @@ public:
 	void SetBoardCoordinate(int XCoord, int YCoord);
 
 	UFUNCTION(BlueprintCallable, Category = "Position")
-	FVector2D GetBoardCoordinate();
+	FVector2D GetBoardCoordinate() const;
 
 	void InitializePiece(EPlayerColor Player, class AChessBoard* Board);
 
 	UFUNCTION(BlueprintCallable, Category = "Object Initialization")
-	UMaterialInstanceDynamic* GetDynamicMaterial();
+	UMaterialInstanceDynamic* GetDynamicMaterial() const;
 
 	FORCEINLINE void SetAdjacentTile(ETileDirection Direction, ATile* pTile) { pNeighbors[(int)Direction] = pTile; }
 
-	ATile* GetTileInDirection(ETileDirection PrimaryDirection, ETileDirection SecondaryDirection = ETileDirection::TILE_NONE);
+	ATile* GetTileInDirection(ETileDirection PrimaryDirection, ETileDirection SecondaryDirection = ETileDirection::TILE_NONE) const;
 
 protected:
 

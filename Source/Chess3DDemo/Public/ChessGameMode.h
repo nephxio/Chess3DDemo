@@ -4,6 +4,7 @@
 
 #include "Piece.h"
 #include "CoreMinimal.h"
+#include "ChessPlayerPawn.h"
 #include "GameFramework/GameModeBase.h"
 #include "ChessGameMode.generated.h"
 
@@ -23,7 +24,7 @@ public:
 
 	virtual void BeginPlay() override;
 
-	void GetKingPointers();
+	void SetKingPointers();
 
 	FORCEINLINE void SetBoard(class AChessBoard* Board) { pBoard = Board; }
 
@@ -35,6 +36,8 @@ public:
 
 	FORCEINLINE EPlayerColor GetPlayerTurn() const { return PlayerTurn; }
 
+	FORCEINLINE AChessPlayerPawn* GetPlayer(EPlayerColor Color) const { return Color == EPlayerColor::PLAYER_WHITE ? PlayerWhite : PlayerBlack;  }
+
 	void AdvanceTurn();
 
 public:
@@ -44,9 +47,13 @@ public:
 protected:
 
 	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<AChessBoard> boardBlueprint;
+	TSubclassOf<AChessBoard>  boardBlueprint;
 
 	AChessBoard* pBoard;
+
+	AChessPlayerPawn* PlayerBlack;
+
+	AChessPlayerPawn* PlayerWhite;
 
 	APieceKing* pWhiteKing;
 

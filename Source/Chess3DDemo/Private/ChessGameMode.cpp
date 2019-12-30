@@ -3,23 +3,29 @@
 #include "ChessGameMode.h"
 #include "ChessBoard.h"
 
-AChessGameMode::AChessGameMode() : pBoard{ nullptr }, pWhiteKing { nullptr }, pBlackKing { nullptr }
+AChessGameMode::AChessGameMode() : pBoard{ nullptr }, PlayerBlack{ nullptr }, PlayerWhite{ nullptr }, pWhiteKing{ nullptr }, pBlackKing{ nullptr }
 {
-
 }
 
 void AChessGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 
+	PlayerBlack = GetWorld()->SpawnActor<AChessPlayerPawn>(AChessPlayerPawn::StaticClass(), FVector(0, 0, 0), FRotator(0, 0, 0));
+	PlayerWhite = GetWorld()->SpawnActor<AChessPlayerPawn>(AChessPlayerPawn::StaticClass(), FVector(0, 0, 0), FRotator(0, 0, 0));
+	PlayerBlack->SetPlayerColor(EPlayerColor::PLAYER_BLACK);
+	PlayerWhite->SetPlayerColor(EPlayerColor::PLAYER_WHITE);
+
 	pBoard = GetWorld()->SpawnActor<AChessBoard>(boardBlueprint, FVector(0,0,0), FRotator(0,0,0));
 
 	GetWorld()->Exec(GetWorld(), TEXT("r.setRes 1200x900w"));
 
-	GetKingPointers();
+	SetKingPointers();
 
 	PlayerTurn = EPlayerColor::PLAYER_WHITE;
 }
+
+
 
 
 void AChessGameMode::Tick(float DeltaSeconds)
@@ -43,7 +49,7 @@ void AChessGameMode::AdvanceTurn()
 	}
 }
 
-void AChessGameMode::GetKingPointers()
+void AChessGameMode::SetKingPointers()
 {
 	TArray<APiece*> pieces = pBoard->GetPlayerPieces(EPlayerColor::PLAYER_BLACK);
 	for (APiece* p : pieces)

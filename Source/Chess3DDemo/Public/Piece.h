@@ -40,10 +40,10 @@ public:
 	bool ChangeHighlight();
 
 	UFUNCTION(BlueprintCallable, Category = "Highlighting")
-	bool IsHighlighted();
+	bool IsHighlighted() const;
 
 	UFUNCTION(BlueprintCallable, Category = "Player Data")
-	EPlayerColor GetPlayerColor();
+	EPlayerColor GetPlayerColor() const;
 	
 	void InitializePiece(EPlayerColor Player);
 
@@ -51,21 +51,21 @@ public:
 	void SetOccupyingTile(ATile* pTile);
 
 	UFUNCTION(BlueprintCallable, Category = "Object Initialization")
-	ATile* GetOccupyingTile();
+	ATile* GetOccupyingTile() const;
 
 	UFUNCTION(BlueprintCallable, Category = "Object Initialization")
-	UMaterialInstanceDynamic* GetDynamicMaterial();
+	UMaterialInstanceDynamic* GetDynamicMaterial() const;
 
 	UFUNCTION(BlueprintCallable, Category = "Position")
-	FVector2D GetBoardLocation();
+	FVector2D GetBoardLocation() const;
 
 //	UFUNCTION(BlueprintCallable, Category = "Piece")
-	FORCEINLINE bool GetIsDead() { return IsDead; }
+	FORCEINLINE bool GetIsDead() const { return IsDead; }
 
 //	UFUNCTION(BlueprintCallable, Category = "Piece")
 	void SetIsDead(bool value);
 
-	TArray<ATile*> GetValidMovesInDirection(ETileDirection PrimaryDirection, ETileDirection SecondaryDirection = ETileDirection::TILE_NONE);
+	TArray<ATile*> GetValidMovesInDirection(ETileDirection PrimaryDirection, ETileDirection SecondaryDirection = ETileDirection::TILE_NONE) const;
 
 	ATile* GetTileFromBoard(int x, int y);
 
@@ -148,7 +148,7 @@ public:
 	//	UFUNCTION(BlueprintCallable, Category = "Movement")
 	virtual TArray<class ATile*> GetValidMoves() override;
 
-	FORCEINLINE bool GetIsFirstMove() { return IsFirstMove; }
+	FORCEINLINE bool GetIsFirstMove() const { return IsFirstMove; }
 
 	FORCEINLINE void SetIsFirstMove(bool FirstMove) { IsFirstMove = FirstMove; }
 

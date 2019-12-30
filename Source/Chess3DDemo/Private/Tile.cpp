@@ -46,7 +46,7 @@ void ATile::InitializePiece(EPlayerColor Player, AChessBoard* Board)
 	IsHighlighted = false;
 }
 
-bool ATile::GetTileIsOccupied()
+bool ATile::GetTileIsOccupied() const
 {
 	if (IsOccupied == EPlayerColor::PLAYER_NONE)
 		return false;
@@ -65,7 +65,7 @@ void ATile::SetBoardCoordinate(int XCoord, int YCoord)
 	BoardCoordinate.Y = YCoord;
 }
 
-FVector2D ATile::GetBoardCoordinate()
+FVector2D ATile::GetBoardCoordinate() const
 {
 	return BoardCoordinate;
 }
@@ -81,12 +81,12 @@ APiece* ATile::GetOccupyingPiece()
 	return pOccupiedBy.Get();
 }
 
-UMaterialInstanceDynamic* ATile::GetDynamicMaterial()
+UMaterialInstanceDynamic* ATile::GetDynamicMaterial() const
 {
 	return pDynamicMaterial;
 }
 
-ATile* ATile::GetTileInDirection(ETileDirection PrimaryDirection, ETileDirection SecondaryDirection)
+ATile* ATile::GetTileInDirection(ETileDirection PrimaryDirection, ETileDirection SecondaryDirection) const
 {
 	if((int)SecondaryDirection < 0)
 	{ 
