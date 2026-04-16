@@ -1,0 +1,14 @@
+{
+  "scenarioId": "dotnet-version-upgrade",
+  "operationId": "70cfdd85-7cdd-4629-be0b-733812c3df12",
+  "description": "Upgrade .NET projects to newer .NET versions",
+  "startTime": "2026-04-16T15:33:44.7390488Z",
+  "lastUpdateTime": "2026-04-16T15:48:26.0609865Z",
+  "stage": "Assessment",
+  "properties": {
+    "currentTask": "01-fix-chess3ddemo-warnings",
+    "UpgradeTargetFramework": "net10.0",
+    "task:01-fix-chess3ddemo-warnings:startedAt": "2026-04-16T15:40:59.4615772Z"
+  },
+  "folderPath": ""
+}
