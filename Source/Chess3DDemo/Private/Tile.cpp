@@ -16,7 +16,7 @@ ATile::ATile() : pNeighbors{ nullptr,nullptr,nullptr,nullptr }, IsHighlighted{ f
 
 void ATile::InitializePiece(EPlayerColor Player, AChessBoard* Board)
 {
-	FLinearColor PieceColor;
+    FLinearColor PieceColor = FLinearColor::Black;
 	TArray<UStaticMeshComponent*> Components;
 
 	if (Player == EPlayerColor::PLAYER_BLACK)
@@ -32,6 +32,7 @@ void ATile::InitializePiece(EPlayerColor Player, AChessBoard* Board)
 	else
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Wrong Piece Color Integer"));
+       return;
 	}
 
 	GetComponents<UStaticMeshComponent>(Components);
@@ -103,7 +104,6 @@ ATile* ATile::GetTileInDirection(ETileDirection PrimaryDirection, ETileDirection
 			return nullptr;
 		}
 	}
-	return nullptr;
 }
 
 void ATile::ChangeTint(FColor Color)

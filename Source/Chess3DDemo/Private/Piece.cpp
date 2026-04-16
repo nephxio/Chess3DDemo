@@ -20,7 +20,7 @@ APiece::APiece() : IsPieceHighlighted { false }
 //Initialize Piece because UE4 is dumb
 void APiece::InitializePiece(EPlayerColor Player)
 {
-	FLinearColor PieceColor;
+    FLinearColor PieceColor = FLinearColor::White;
 	TArray<UStaticMeshComponent*> Components;
 
 	if (Player == EPlayerColor::PLAYER_BLACK)
@@ -36,6 +36,7 @@ void APiece::InitializePiece(EPlayerColor Player)
 	else
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Wrong Piece Color Integer"));
+       return;
 	}
 
 	GetComponents<UStaticMeshComponent>(Components);
