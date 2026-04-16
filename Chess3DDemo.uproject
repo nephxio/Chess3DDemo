@@ -1,17 +1,26 @@
 {
-	"FileVersion": 3,
-	"EngineAssociation": "4.24",
-	"Category": "",
-	"Description": "",
-	"Modules": [
-		{
-			"Name": "Chess3DDemo",
-			"Type": "Runtime",
-			"LoadingPhase": "Default",
-			"AdditionalDependencies": [
-				"Engine",
-				"UMG"
-			]
-		}
-	]
+  "FileVersion": 3,
+  "EngineAssociation": "5.7",
+  "Category": "",
+  "Description": "",
+  "Modules": [
+    {
+      "Name": "Chess3DDemo",
+      "Type": "Runtime",
+      "LoadingPhase": "Default"
+    }
+  ],
+  "Plugins": [
+    {
+      "Name": "VisualStudioTools",
+      "Enabled": true,
+      "SupportedTargetPlatforms": [
+        "Win64"
+      ]
+    }
+  ],
+  "TargetPlatforms": [],
+  "AdditionalRootDirectories": [],
+  "AdditionalPluginDirectories": [],
+  "EpicSampleNameHash": ""
 }
