@@ -1,6 +1,13 @@
 # Visual Studio 2015 user specific files
 .vs/
 
+# Copilot / AI assistant artifacts
+copilot.md
+Copilot.md
+**/copilot*.md
+**/Copilot*.md
+.github/
+
 # Compiled Object files
 *.slo
 *.lo
